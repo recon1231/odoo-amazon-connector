@@ -8,7 +8,7 @@ Module: `chi_amazon_connector` · Author: **CH Hamza International** · License:
 
 ![Dashboard](docs/screenshots/dash.png)
 
-🎬 Promo video: [`docs/promo/amazon-seller-hub-promo.mp4`](docs/promo/amazon-seller-hub-promo.mp4)
+🎬 **Promo video:** https://youtu.be/YIMt6Ycor78 ([mp4 copy](docs/promo/amazon-seller-hub-promo.mp4))
 
 ## Features
 
