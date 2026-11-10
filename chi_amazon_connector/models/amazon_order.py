@@ -73,7 +73,7 @@ class AmazonOrder(models.Model):
     invoice_count = fields.Integer(compute="_compute_invoice_count")
     return_ids = fields.One2many("chi.amazon.return", "order_id")
 
-    _name_unique = models.Constraint("unique(account_id, name)", "This Amazon order was already imported.")
+    _sql_constraints = [("name_unique", "unique(account_id, name)", "This Amazon order was already imported.")]
 
     @api.depends("line_ids.subtotal", "line_ids.tax", "line_ids.shipping", "line_ids.cost", "line_ids.quantity")
     def _compute_amounts(self):
@@ -193,7 +193,7 @@ class AmazonOrder(models.Model):
                 "name": line.title or line.product_id.display_name,
                 "product_uom_qty": line.quantity,
                 "price_unit": line.quantity and float_round(line.subtotal / line.quantity, 4) or 0.0,
-                "tax_ids": [(6, 0, line.product_id.taxes_id.filtered(lambda t: t.company_id == account.company_id).ids)]
+                "tax_id": [(6, 0, line.product_id.taxes_id.filtered(lambda t: t.company_id == account.company_id).ids)]
                 if not account.fiscal_position_id else False,
             }))
         if self.amount_shipping and account.shipping_product_id:

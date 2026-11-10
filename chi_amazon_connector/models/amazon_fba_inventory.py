@@ -31,8 +31,7 @@ class AmazonFbaInventory(models.Model):
     days_of_cover = fields.Float(compute="_compute_odoo_qty", help="Fulfillable units / average daily sales (30d).")
     last_sync = fields.Datetime()
 
-    _sku_unique = models.Constraint("unique(account_id, marketplace_id, seller_sku)",
-                                    "One FBA line per SKU and marketplace.")
+    _sql_constraints = [("sku_unique", "unique(account_id, marketplace_id, seller_sku)", "One FBA line per SKU and marketplace.")]
 
     @api.depends("fulfillable", "inbound_working", "inbound_shipped", "inbound_receiving",
                  "reserved", "unfulfillable", "researching")

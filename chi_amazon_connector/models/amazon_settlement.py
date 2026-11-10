@@ -86,7 +86,7 @@ class AmazonSettlement(models.Model):
     state = fields.Selection([("draft", "Imported"), ("entry", "Entry created"), ("posted", "Posted")],
                              default="draft", tracking=True)
 
-    _name_unique = models.Constraint("unique(account_id, name)", "Settlement already imported.")
+    _sql_constraints = [("name_unique", "unique(account_id, name)", "Settlement already imported.")]
 
     @api.depends("line_ids.amount", "line_ids.category", "deposit_amount")
     def _compute_totals(self):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Amazon Seller Hub — SP-API Connector",
-    "version": "19.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Sales/Sales",
     "summary": "Connect Amazon Seller Central (SP-API) to Odoo: orders, listings, "
                "stock sync, FBA inventory, settlements to accounting, returns, "

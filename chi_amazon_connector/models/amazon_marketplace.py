@@ -17,7 +17,7 @@ class AmazonMarketplace(models.Model):
     currency_id = fields.Many2one("res.currency")
     active = fields.Boolean(default=True)
 
-    _code_unique = models.Constraint("unique(code)", "This marketplace already exists.")
+    _sql_constraints = [("code_unique", "unique(code)", "This marketplace already exists.")]
 
     def product_url(self, asin):
         self.ensure_one()

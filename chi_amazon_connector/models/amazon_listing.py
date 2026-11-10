@@ -51,8 +51,7 @@ class AmazonListing(models.Model):
     revenue_30d = fields.Monetary("Sales (30d)", compute="_compute_sales", store=True)
     order_line_ids = fields.One2many("chi.amazon.order.line", "listing_id")
 
-    _sku_unique = models.Constraint("unique(account_id, marketplace_id, seller_sku)",
-                                    "This SKU already exists for this marketplace.")
+    _sql_constraints = [("sku_unique", "unique(account_id, marketplace_id, seller_sku)", "This SKU already exists for this marketplace.")]
 
     @api.depends("asin", "marketplace_id.domain")
     def _compute_amazon_url(self):
