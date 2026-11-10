@@ -26,6 +26,7 @@ Run your whole Amazon business from Odoo:
     "price": 249.0,
     "currency": "USD",
     "depends": ["sale_management", "stock", "account"],
+    "external_dependencies": {"python": ["requests"]},
     "data": [
         "security/security.xml",
         "security/ir.model.access.csv",
@@ -57,7 +58,13 @@ Run your whole Amazon business from Odoo:
             "chi_amazon_connector/static/src/dashboard/*.scss",
         ],
     },
-    "images": ["static/description/banner.png"],
+    "images": [
+        "static/description/banner.gif",
+        "static/description/screenshot_dash.jpg",
+        "static/description/screenshot_dash_bottom.jpg",
+        "static/description/screenshot_listings.jpg",
+        "static/description/screenshot_settlement.jpg",
+    ],
     "application": True,
     "installable": True,
 }

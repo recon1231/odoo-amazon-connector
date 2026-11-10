@@ -1,10 +1,14 @@
-# Amazon Seller Hub for Odoo 19
+# Amazon Seller Hub for Odoo 18 · 19 · 20
 
-Connects **Amazon Seller Central (SP-API)** to **Odoo 19**: orders, listings, stock sync, FBA inventory, settlements booked to accounting, returns, and a profit dashboard.
+![Amazon Seller Hub](docs/promo/banner.gif)
+
+Connects **Amazon Seller Central (SP-API)** to **Odoo**: orders, listings, stock sync, FBA inventory, settlements booked to accounting, returns, and a profit dashboard.
 
 Module: `chi_amazon_connector` · Author: **CH Hamza International** · License: **OPL-1** (paid, Odoo Apps Store)
 
 ![Dashboard](docs/screenshots/dash.png)
+
+🎬 Promo video: [`docs/promo/amazon-seller-hub-promo.mp4`](docs/promo/amazon-seller-hub-promo.mp4)
 
 ## Features
 
@@ -54,7 +58,15 @@ chi_amazon_connector/
 
 ## Branches
 
-`19.0` is the main branch. Ports to `18.0` and `20.0` will follow, one branch per Odoo version as the Apps Store requires.
+There is one branch per Odoo version, as the Odoo Apps Store requires:
+
+| Branch | Odoo | Notes |
+|---|---|---|
+| `18.0` | 18 | `ir.module.category` groups, `_sql_constraints`, `tax_id` on order lines |
+| `19.0` | 19 | `res.groups.privilege`, `models.Constraint` |
+| `20.0` | 20 | `ir.access` security, Owl 3 (`proxy` / `signal.ref` / `useProps`), Material Symbols icons |
+
+All three branches were installed with demo data and pass the test suite.
 
 ---
 Amazon is a trademark of Amazon.com, Inc. This module is an independent integration and is not affiliated with Amazon.
