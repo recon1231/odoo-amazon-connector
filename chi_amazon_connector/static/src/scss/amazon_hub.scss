@@ -1,0 +1,78 @@
+// Amazon Seller Hub — shared look for list, kanban and form views
+
+// ---- account kanban ------------------------------------------------------
+.o_amz_account_kanban .o_kanban_record {
+    border-radius: 14px !important;
+    overflow: hidden;
+    transition: box-shadow .15s, transform .15s;
+    &:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15, 27, 45, .12); }
+}
+.o_amz_account_card { padding: 16px !important; }
+.o_amz_avatar {
+    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; font-size: 1.2rem; color: #fff;
+    background: linear-gradient(135deg, #0f1b2d, #2563eb); flex-shrink: 0;
+}
+.o_amz_account_stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    a {
+        display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 10px;
+        background: $o-gray-100; color: $o-main-text-color !important; text-decoration: none;
+        b, b .o_field_widget { font-size: 1.25rem; font-weight: 700; } > span { font-size: .72rem; color: $o-gray-600; }
+        &:hover { background: $o-gray-200; }
+        &.o_amz_warn b { color: #d97706; }
+    }
+}
+.o_amz_account_card footer { display: flex; align-items: center; gap: 8px; }
+
+// ---- listing kanban ------------------------------------------------------
+.o_amz_listing_kanban .o_kanban_record { border-radius: 12px !important; overflow: hidden; }
+.o_amz_listing_card { min-height: 116px; }
+.o_amz_thumb {
+    width: 104px; flex-shrink: 0; display: grid; place-items: center; background: #fff;
+    border-right: 1px solid $o-gray-200;
+    img { max-width: 92px; max-height: 92px; object-fit: contain; }
+    .fa { font-size: 2rem; color: $o-gray-600; }
+}
+.o_amz_clamp { display: -webkit-box !important; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+// ---- return kanban -------------------------------------------------------
+.o_amz_return_kanban .o_kanban_record { border-radius: 12px !important; }
+
+// ---- lists ---------------------------------------------------------------
+.o_amz_list {
+    .o_data_row td .badge { font-weight: 600; }
+}
+
+// ---- forms ---------------------------------------------------------------
+.o_amz_form {
+    .o_amz_money_cards {
+        display: flex; gap: 10px; flex-wrap: wrap;
+        > div {
+            min-width: 130px; padding: 10px 14px; border-radius: 12px; background: $o-gray-100;
+            border: 1px solid $o-gray-200; display: flex; flex-direction: column;
+            > span:first-child { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700;
+                color: $o-gray-600; }
+            .o_field_widget { font-size: 1.15rem; font-weight: 700; }
+            &.o_amz_good { border-color: rgba(16, 185, 129, .4); background: rgba(16, 185, 129, .07); }
+            &.o_amz_bad { border-color: rgba(239, 68, 68, .35); background: rgba(239, 68, 68, .05); }
+        }
+    }
+    .o_amz_money_cards_wide > div { flex: 1; }
+
+    .o_amz_listing_hero {
+        display: flex; gap: 20px; align-items: center; margin-bottom: 16px;
+        .o_amz_hero_img {
+            width: 140px; height: 140px; border-radius: 14px; display: grid; place-items: center; flex-shrink: 0;
+            background: #fff; border: 1px solid $o-gray-200; overflow: hidden;
+            > .fa { font-size: 3rem; color: $o-gray-600; }
+            img { object-fit: contain; }
+        }
+        h1 { font-family: var(--bs-font-monospace); }
+    }
+    .o_amz_hero_kpis {
+        display: flex; gap: 22px; flex-wrap: wrap;
+        > div { display: flex; flex-direction: column; font-weight: 700; font-size: 1.1rem;
+            > span:first-child { font-size: .7rem; text-transform: uppercase; color: $o-gray-600; letter-spacing: .06em; } }
+        .o_field_widget { display: inline; }
+    }
+}

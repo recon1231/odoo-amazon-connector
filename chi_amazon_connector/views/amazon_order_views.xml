@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_order_list" model="ir.ui.view">
+        <field name="name">chi.amazon.order.list</field>
+        <field name="model">chi.amazon.order</field>
+        <field name="arch" type="xml">
+            <list class="o_amz_list" create="0"
+                  decoration-danger="state == 'error'" decoration-muted="state == 'cancel'">
+                <header>
+                    <button name="action_process" type="object" string="Process"/>
+                    <button name="action_reset" type="object" string="Retry"/>
+                </header>
+                <field name="name" class="fw-bold"/>
+                <field name="purchase_date" widget="datetime"/>
+                <field name="marketplace_id" optional="show"/>
+                <field name="fulfillment" widget="badge" decoration-info="fulfillment == 'fba'" decoration-warning="fulfillment == 'fbm'"/>
+                <field name="is_prime" widget="boolean" optional="hide"/>
+                <field name="ship_city" optional="hide"/>
+                <field name="units" sum="Units" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="amount_total" sum="Total" widget="monetary"/>
+                <field name="amount_fees" sum="Fees" optional="show"/>
+                <field name="margin" sum="Margin" optional="show"/>
+                <field name="margin_pct" widget="progressbar" optional="show"/>
+                <field name="amazon_status" widget="badge"
+                       decoration-success="amazon_status == 'shipped'" decoration-warning="amazon_status in ('pending', 'unshipped', 'partially_shipped')"
+                       decoration-danger="amazon_status in ('canceled', 'unfulfillable')"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'done'" decoration-danger="state == 'error'"
+                       decoration-info="state == 'new'" decoration-muted="state == 'cancel'"/>
+                <field name="invoice_status" widget="badge" optional="show"
+                       decoration-success="invoice_status == 'invoiced'" decoration-warning="invoice_status == 'to invoice'"/>
+                <field name="sale_order_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_amazon_order_form" model="ir.ui.view">
+        <field name="name">chi.amazon.order.form</field>
+        <field name="model">chi.amazon.order</field>
+        <field name="arch" type="xml">
+            <form class="o_amz_form" create="0">
+                <header>
+                    <button name="action_process" type="object" string="Create sale order" class="btn-primary"
+                            invisible="state not in ('new', 'error')"/>
+                    <button name="action_open_amazon" type="object" string="Seller Central" icon="fa-external-link"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_sale_order" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                                invisible="not sale_order_id" string="Sale order"/>
+                        <button name="action_open_invoices" type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+                                invisible="not invoice_count">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-start justify-content-between flex-wrap gap-2">
+                        <div class="oe_title">
+                            <span class="text-muted small">Amazon order</span>
+                            <h1><field name="name" readonly="1"/></h1>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <field name="fulfillment" widget="badge" decoration-info="fulfillment == 'fba'" decoration-warning="fulfillment == 'fbm'"/>
+                                <field name="amazon_status" widget="badge"
+                                       decoration-success="amazon_status == 'shipped'" decoration-warning="amazon_status in ('pending', 'unshipped')"
+                                       decoration-danger="amazon_status in ('canceled', 'unfulfillable')"/>
+                                <span class="badge text-bg-dark" invisible="not is_prime">Prime</span>
+                                <span class="badge text-bg-secondary" invisible="not is_business">Business</span>
+                            </div>
+                        </div>
+                        <div class="o_amz_money_cards">
+                            <div><span>Total</span><field name="amount_total" widget="monetary"/></div>
+                            <div><span>Fees</span><field name="amount_fees" widget="monetary"/></div>
+                            <div class="o_amz_good"><span>Margin</span><field name="margin" widget="monetary"/></div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger mt-3" role="status" invisible="state != 'error'">
+                        <i title="exclamation circle" class="fa fa-exclamation-circle me-2"/><field name="error_message" readonly="1" class="d-inline"/>
+                    </div>
+                    <group class="mt-3">
+                        <group>
+                            <field name="account_id" readonly="1"/>
+                            <field name="marketplace_id" readonly="1"/>
+                            <field name="sales_channel" readonly="1"/>
+                            <field name="sale_order_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="purchase_date" readonly="1"/>
+                            <field name="latest_ship_date" readonly="1"/>
+                            <field name="buyer_name"/>
+                            <label for="ship_city" string="Ships to"/>
+                            <div class="d-flex gap-1"><field name="ship_city"/><field name="ship_state"/><field name="ship_country_id"/></div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Items" name="items">
+                            <field name="line_ids" readonly="state not in ('new', 'error')">
+                                <list editable="bottom">
+                                    <field name="seller_sku"/>
+                                    <field name="asin" optional="show"/>
+                                    <field name="title"/>
+                                    <field name="product_id" decoration-danger="not product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="subtotal" sum="Items"/>
+                                    <field name="tax" sum="Tax" optional="show"/>
+                                    <field name="shipping" sum="Shipping" optional="show"/>
+                                    <field name="promotion" optional="hide"/>
+                                    <field name="cost" sum="Cost"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="amount_untaxed"/>
+                                <field name="amount_shipping"/>
+                                <field name="amount_tax"/>
+                                <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                                <field name="amount_cost"/>
+                                <field name="margin_pct" widget="float" digits="[16,1]"/>
+                            </group>
+                        </page>
+                        <page string="Returns" name="returns" invisible="not return_ids">
+                            <field name="return_ids" readonly="1">
+                                <list>
+                                    <field name="name"/><field name="seller_sku"/><field name="reason"/>
+                                    <field name="disposition"/><field name="refund_amount"/><field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amazon_order_search" model="ir.ui.view">
+        <field name="name">chi.amazon.order.search</field>
+        <field name="model">chi.amazon.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Amazon order"/>
+                <field name="line_ids" string="SKU" filter_domain="[('line_ids.seller_sku', 'ilike', self)]"/>
+                <field name="account_id"/>
+                <field name="sale_order_id"/>
+                <filter name="attention" string="Needs attention" domain="[('state', '=', 'error')]"/>
+                <filter name="to_process" string="To process" domain="[('state', '=', 'new')]"/>
+                <filter name="to_ship" string="To ship (FBM)" domain="[('fulfillment', '=', 'fbm'), ('amazon_status', 'in', ('unshipped', 'partially_shipped'))]"/>
+                <separator/>
+                <filter name="fba" string="FBA" domain="[('fulfillment', '=', 'fba')]"/>
+                <filter name="fbm" string="FBM" domain="[('fulfillment', '=', 'fbm')]"/>
+                <filter name="prime" string="Prime" domain="[('is_prime', '=', True)]"/>
+                <separator/>
+                <filter name="purchase_date" string="Order date" date="purchase_date"/>
+                <group>
+                    <filter name="g_marketplace" string="Marketplace" context="{'group_by': 'marketplace_id'}"/>
+                    <filter name="g_status" string="Amazon status" context="{'group_by': 'amazon_status'}"/>
+                    <filter name="g_day" string="Day" context="{'group_by': 'purchase_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_amazon_order_graph" model="ir.ui.view">
+        <field name="name">chi.amazon.order.graph</field>
+        <field name="model">chi.amazon.order</field>
+        <field name="arch" type="xml">
+            <graph string="Amazon sales" type="bar" stacked="1" sample="1">
+                <field name="purchase_date" interval="day"/>
+                <field name="fulfillment"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_amazon_order_pivot" model="ir.ui.view">
+        <field name="name">chi.amazon.order.pivot</field>
+        <field name="model">chi.amazon.order</field>
+        <field name="arch" type="xml">
+            <pivot string="Amazon sales" sample="1">
+                <field name="marketplace_id" type="row"/>
+                <field name="purchase_date" interval="month" type="col"/>
+                <field name="amount_total" type="measure"/>
+                <field name="margin" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_amazon_order" model="ir.actions.act_window">
+        <field name="name">Amazon Orders</field>
+        <field name="res_model">chi.amazon.order</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No Amazon orders yet</p>
+            <p>Orders are imported every 15 minutes once an account is connected.</p>
+        </field>
+    </record>
+
+    <record id="action_amazon_order_analysis" model="ir.actions.act_window">
+        <field name="name">Sales Analysis</field>
+        <field name="res_model">chi.amazon.order</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('amazon_status', '!=', 'canceled')]</field>
+    </record>
+</odoo>

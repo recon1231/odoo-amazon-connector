@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_account_kanban" model="ir.ui.view">
+        <field name="name">chi.amazon.account.kanban</field>
+        <field name="model">chi.amazon.account</field>
+        <field name="arch" type="xml">
+            <kanban class="o_amz_account_kanban" create="1">
+                <field name="state"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="card" class="o_amz_account_card">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="o_amz_avatar"><i title="cubes" class="fa fa-cubes"/></div>
+                            <div class="flex-grow-1 overflow-hidden">
+                                <field name="name" class="fw-bold fs-5 text-truncate d-block"/>
+                                <span class="text-muted small"><field name="region"/> · <field name="environment"/></span>
+                            </div>
+                            <field name="state" widget="badge"
+                                   decoration-success="state == 'connected'"
+                                   decoration-danger="state == 'error'"
+                                   decoration-muted="state == 'draft'"/>
+                        </div>
+                        <field name="marketplace_ids" widget="many2many_tags" class="mb-3"/>
+                        <div class="o_amz_account_stats">
+                            <a name="action_open_orders" type="object"><b><field name="order_count"/></b><span>Orders</span></a>
+                            <a name="action_open_listings" type="object"><b><field name="listing_count"/></b><span>Listings</span></a>
+                            <a name="action_open_unmapped" type="object" class="o_amz_warn" invisible="not unmapped_count">
+                                <b><field name="unmapped_count"/></b><span>Unmapped</span></a>
+                        </div>
+                        <footer class="pt-2 mt-2 border-top">
+                            <span class="text-muted small">Last sync: <field name="last_sync" widget="remaining_days" invisible="not last_sync"/><span invisible="last_sync">never</span></span>
+                            <button name="action_sync_all" type="object" class="btn btn-sm btn-primary ms-auto"
+                                    invisible="state == 'draft'"><i title="refresh" class="fa fa-refresh me-1"/>Sync</button>
+                            <button name="action_test_connection" type="object" class="btn btn-sm btn-secondary ms-auto"
+                                    invisible="state != 'draft'" groups="chi_amazon_connector.group_amazon_manager">Connect</button>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_amazon_account_list" model="ir.ui.view">
+        <field name="name">chi.amazon.account.list</field>
+        <field name="model">chi.amazon.account</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="region"/>
+                <field name="marketplace_ids" widget="many2many_tags"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'connected'" decoration-danger="state == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_amazon_account_form" model="ir.ui.view">
+        <field name="name">chi.amazon.account.form</field>
+        <field name="model">chi.amazon.account</field>
+        <field name="arch" type="xml">
+            <form class="o_amz_form">
+                <header>
+                    <button name="action_test_connection" type="object" string="Test connection" class="btn-primary"
+                            groups="chi_amazon_connector.group_amazon_manager"/>
+                    <button name="action_sync_all" type="object" string="Sync everything" invisible="state == 'draft'"/>
+                    <button name="action_sync_orders" type="object" string="Orders" invisible="state == 'draft'"/>
+                    <button name="action_sync_listings" type="object" string="Listings" invisible="state == 'draft'"/>
+                    <button name="action_push_stock" type="object" string="Push stock" invisible="state == 'draft' or not stock_push"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,connected"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart">
+                            <field name="order_count" widget="statinfo" string="Orders"/>
+                        </button>
+                        <button name="action_open_listings" type="object" class="oe_stat_button" icon="fa-tags">
+                            <field name="listing_count" widget="statinfo" string="Listings"/>
+                        </button>
+                        <button name="action_open_unmapped" type="object" class="oe_stat_button text-warning" icon="fa-chain-broken"
+                                invisible="not unmapped_count">
+                            <field name="unmapped_count" widget="statinfo" string="Unmapped"/>
+                        </button>
+                        <button name="action_open_logs" type="object" class="oe_stat_button" icon="fa-history" string="Sync log"/>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. My Amazon.ca store"/></h1>
+                    </div>
+                    <div class="alert alert-danger mb-3" role="status" invisible="state != 'error' or not last_error">
+                        <i title="exclamation triangle" class="fa fa-exclamation-triangle me-2"/><field name="last_error" readonly="1" class="d-inline"/>
+                    </div>
+                    <group>
+                        <group string="Seller Central">
+                            <field name="region" widget="radio" options="{'horizontal': true}"/>
+                            <field name="environment" widget="radio" options="{'horizontal': true}"/>
+                            <field name="seller_id"/>
+                            <field name="marketplace_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Credentials" groups="chi_amazon_connector.group_amazon_manager">
+                            <field name="lwa_client_id" password="True"/>
+                            <field name="lwa_client_secret" password="True"/>
+                            <field name="refresh_token" password="True"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Orders" name="orders">
+                            <group>
+                                <group string="Sale orders">
+                                    <field name="customer_id" required="auto_create_order"/>
+                                    <field name="team_id"/>
+                                    <field name="fiscal_position_id"/>
+                                    <field name="shipping_product_id"/>
+                                    <field name="order_history_days"/>
+                                    <field name="orders_synced_until"/>
+                                </group>
+                                <group string="Automation">
+                                    <field name="auto_create_order" widget="boolean_toggle"/>
+                                    <field name="auto_confirm_order" widget="boolean_toggle" invisible="not auto_create_order"/>
+                                    <field name="auto_validate_fba" widget="boolean_toggle" invisible="not auto_confirm_order"/>
+                                    <field name="auto_invoice" widget="boolean_toggle" invisible="not auto_confirm_order"/>
+                                    <field name="auto_post_invoice" widget="boolean_toggle" invisible="not auto_invoice"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Inventory" name="inventory">
+                            <group>
+                                <group string="Warehouses">
+                                    <field name="warehouse_id"/>
+                                    <field name="fba_warehouse_id"/>
+                                </group>
+                                <group string="Stock push (FBM)">
+                                    <field name="stock_push" widget="boolean_toggle"/>
+                                    <field name="stock_buffer" invisible="not stock_push"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Accounting" name="accounting">
+                            <group>
+                                <group string="Settlements">
+                                    <field name="settlement_journal_id"/>
+                                    <field name="account_transfer_id"/>
+                                    <field name="account_clearing_id"/>
+                                    <field name="auto_settlement_entry" widget="boolean_toggle"/>
+                                    <field name="auto_post_settlement" widget="boolean_toggle" invisible="not auto_settlement_entry"/>
+                                </group>
+                                <group string="Fees &amp; adjustments">
+                                    <field name="account_referral_id"/>
+                                    <field name="account_fba_id"/>
+                                    <field name="account_storage_id"/>
+                                    <field name="account_ads_id"/>
+                                    <field name="account_promotion_id"/>
+                                    <field name="account_refund_id"/>
+                                    <field name="account_reimbursement_id"/>
+                                    <field name="account_other_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_amazon_account" model="ir.actions.act_window">
+        <field name="name">Amazon Accounts</field>
+        <field name="res_model">chi.amazon.account</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Connect your first Amazon seller account</p>
+            <p>Create an SP-API app in Seller Central (Apps &amp; Services &gt; Develop Apps), authorize it, then paste the
+                LWA client id, secret and refresh token here.</p>
+        </field>
+    </record>
+</odoo>

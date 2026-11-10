@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_sync_wizard_form" model="ir.ui.view">
+        <field name="name">chi.amazon.sync.wizard.form</field>
+        <field name="model">chi.amazon.sync.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="account_ids" widget="many2many_tags"/>
+                </group>
+                <group>
+                    <group string="What to sync">
+                        <field name="sync_orders" widget="boolean_toggle"/>
+                        <field name="sync_listings" widget="boolean_toggle"/>
+                        <field name="sync_fba" widget="boolean_toggle"/>
+                        <field name="sync_settlements" widget="boolean_toggle"/>
+                        <field name="push_stock" widget="boolean_toggle"/>
+                    </group>
+                    <group string="Missed orders">
+                        <field name="orders_from"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_run" type="object" string="Sync now" class="btn-primary"/>
+                    <button special="cancel" string="Cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_amazon_sync_wizard" model="ir.actions.act_window">
+        <field name="name">Sync Amazon now</field>
+        <field name="res_model">chi.amazon.sync.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

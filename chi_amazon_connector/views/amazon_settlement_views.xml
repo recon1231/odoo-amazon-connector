@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_settlement_list" model="ir.ui.view">
+        <field name="name">chi.amazon.settlement.list</field>
+        <field name="model">chi.amazon.settlement</field>
+        <field name="arch" type="xml">
+            <list class="o_amz_list" create="0">
+                <header>
+                    <button name="action_create_entry" type="object" string="Create entries"/>
+                    <button name="action_post" type="object" string="Post"/>
+                </header>
+                <field name="deposit_date" widget="date"/>
+                <field name="name"/>
+                <field name="account_id" optional="show"/>
+                <field name="start_date" widget="date" optional="hide"/>
+                <field name="end_date" widget="date" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="total_sales" sum="Sales"/>
+                <field name="total_fees" sum="Fees"/>
+                <field name="total_refunds" sum="Refunds"/>
+                <field name="deposit_amount" sum="Payout" class="fw-bold"/>
+                <field name="difference" optional="show" decoration-danger="difference != 0"/>
+                <field name="state" widget="badge" decoration-success="state == 'posted'" decoration-info="state == 'entry'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_amazon_settlement_form" model="ir.ui.view">
+        <field name="name">chi.amazon.settlement.form</field>
+        <field name="model">chi.amazon.settlement</field>
+        <field name="arch" type="xml">
+            <form class="o_amz_form" create="0">
+                <header>
+                    <button name="action_create_entry" type="object" string="Create journal entry" class="btn-primary"
+                            invisible="move_id"/>
+                    <button name="action_post" type="object" string="Post entry" class="btn-primary" invisible="state != 'entry'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_move" type="object" class="oe_stat_button" icon="fa-book"
+                                invisible="not move_id" string="Journal entry"/>
+                    </div>
+                    <div class="oe_title">
+                        <span class="text-muted small">Settlement</span>
+                        <h1><field name="name" readonly="1"/></h1>
+                        <span class="text-muted"><field name="start_date" widget="date" readonly="1"/> → <field name="end_date" widget="date" readonly="1"/></span>
+                    </div>
+                    <div class="o_amz_money_cards o_amz_money_cards_wide my-3">
+                        <div><span>Sales</span><field name="total_sales" widget="monetary"/></div>
+                        <div class="o_amz_bad"><span>Fees</span><field name="total_fees" widget="monetary"/></div>
+                        <div class="o_amz_bad"><span>Refunds</span><field name="total_refunds" widget="monetary"/></div>
+                        <div><span>Reimbursed</span><field name="total_other" widget="monetary"/></div>
+                        <div class="o_amz_good"><span>Payout</span><field name="deposit_amount" widget="monetary"/></div>
+                    </div>
+                    <div class="alert alert-warning" role="status" invisible="difference == 0">
+                        Lines and payout differ by <field name="difference" class="d-inline fw-bold"/>. Review before booking.
+                    </div>
+                    <group>
+                        <group>
+                            <field name="account_id" readonly="1"/>
+                            <field name="deposit_date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" readonly="1"/>
+                            <field name="move_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Transactions" name="lines">
+                            <field name="line_ids" readonly="state == 'posted'">
+                                <list editable="bottom" create="0" delete="0">
+                                    <field name="posted_date" widget="date"/>
+                                    <field name="transaction_type"/>
+                                    <field name="order_ref"/>
+                                    <field name="sku" optional="show"/>
+                                    <field name="description"/>
+                                    <field name="category" widget="badge"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="amount" sum="Total"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amazon_settlement_search" model="ir.ui.view">
+        <field name="name">chi.amazon.settlement.search</field>
+        <field name="model">chi.amazon.settlement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="account_id"/>
+                <filter name="to_book" string="To book" domain="[('state', '!=', 'posted')]"/>
+                <filter name="unbalanced" string="Not balanced" domain="[('difference', '!=', 0)]"/>
+                <filter name="deposit_date" string="Payout date" date="deposit_date"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_amazon_settlement" model="ir.actions.act_window">
+        <field name="name">Settlements</field>
+        <field name="res_model">chi.amazon.settlement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_listing_list" model="ir.ui.view">
+        <field name="name">chi.amazon.listing.list</field>
+        <field name="model">chi.amazon.listing</field>
+        <field name="arch" type="xml">
+            <list class="o_amz_list" multi_edit="1">
+                <header>
+                    <button name="action_auto_map" type="object" string="Auto-map products"/>
+                    <button name="action_push_quantity" type="object" string="Push stock"/>
+                </header>
+                <field name="seller_sku" class="fw-bold"/>
+                <field name="title" optional="show"/>
+                <field name="asin" optional="show"/>
+                <field name="product_id" optional="show"/>
+                <field name="marketplace_id" optional="hide"/>
+                <field name="fulfillment" widget="badge" decoration-info="fulfillment == 'fba'" decoration-warning="fulfillment == 'fbm'"/>
+                <field name="status" widget="badge" decoration-success="status == 'active'" decoration-muted="status in ('inactive', 'deleted')" decoration-danger="status == 'incomplete'" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="price" widget="monetary"/>
+                <field name="cost" optional="hide"/>
+                <field name="margin_pct" widget="progressbar" optional="show"/>
+                <field name="amazon_qty"/>
+                <field name="odoo_qty" optional="show"/>
+                <field name="stock_health" widget="badge"
+                       decoration-success="stock_health == 'ok'" decoration-danger="stock_health in ('oversell', 'unmapped')"
+                       decoration-warning="stock_health == 'under'" decoration-info="stock_health == 'fba'"/>
+                <field name="units_30d" sum="Units" optional="show"/>
+                <field name="revenue_30d" sum="Sales" optional="show"/>
+                <field name="push_enabled" widget="boolean_toggle" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_amazon_listing_kanban" model="ir.ui.view">
+        <field name="name">chi.amazon.listing.kanban</field>
+        <field name="model">chi.amazon.listing</field>
+        <field name="arch" type="xml">
+            <kanban class="o_amz_listing_kanban">
+                <field name="image_url"/>
+                <field name="stock_health"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card" class="flex-row p-0 o_amz_listing_card">
+                        <aside class="o_amz_thumb">
+                            <img t-if="record.image_url.raw_value" t-att-src="record.image_url.raw_value" alt="Product"/>
+                            <i title="cube" t-else="" class="fa fa-cube"/>
+                        </aside>
+                        <main class="p-2 flex-grow-1 overflow-hidden">
+                            <div class="d-flex justify-content-between gap-2">
+                                <field name="seller_sku" class="fw-bold text-truncate"/>
+                                <field name="fulfillment" widget="badge" decoration-info="fulfillment == 'fba'" decoration-warning="fulfillment == 'fbm'"/>
+                            </div>
+                            <field name="title" class="small text-muted o_amz_clamp"/>
+                            <div class="d-flex align-items-end justify-content-between mt-2">
+                                <field name="price" widget="monetary" class="fs-5 fw-bold"/>
+                                <field name="stock_health" widget="badge"
+                                       decoration-success="stock_health == 'ok'" decoration-danger="stock_health in ('oversell', 'unmapped')"
+                                       decoration-warning="stock_health == 'under'" decoration-info="stock_health == 'fba'"/>
+                            </div>
+                            <div class="d-flex gap-3 small text-muted mt-1">
+                                <span><i title="shopping bag" class="fa fa-shopping-bag me-1"/><field name="amazon_qty"/> listed</span>
+                                <span><i title="archive" class="fa fa-archive me-1"/><field name="odoo_qty"/> in Odoo</span>
+                                <span class="ms-auto"><field name="units_30d"/> sold / 30d</span>
+                            </div>
+                        </main>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_amazon_listing_form" model="ir.ui.view">
+        <field name="name">chi.amazon.listing.form</field>
+        <field name="model">chi.amazon.listing</field>
+        <field name="arch" type="xml">
+            <form class="o_amz_form">
+                <header>
+                    <button name="action_push_quantity" type="object" string="Push stock" class="btn-primary"
+                            invisible="fulfillment != 'fbm' or not product_id"/>
+                    <button name="action_auto_map" type="object" string="Find product" invisible="product_id"/>
+                    <button name="action_open_amazon" type="object" string="View on Amazon" icon="fa-external-link" invisible="not asin"/>
+                    <field name="status" widget="statusbar" statusbar_visible="active,inactive"/>
+                </header>
+                <sheet>
+                    <div class="o_amz_listing_hero">
+                        <div class="o_amz_hero_img">
+                            <field name="image_url" widget="image_url" options="{'size': [140, 140]}" invisible="not image_url"/>
+                            <i title="cube" class="fa fa-cube" invisible="image_url"/>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h1 class="mb-1"><field name="seller_sku" placeholder="SKU"/></h1>
+                            <field name="title" placeholder="Listing title" class="text-muted"/>
+                            <div class="o_amz_hero_kpis mt-3">
+                                <div><span>Price</span><field name="price" widget="monetary"/></div>
+                                <div><span>Margin</span><field name="margin_pct" widget="float" digits="[16,1]"/>%</div>
+                                <div><span>Sold 30d</span><field name="units_30d"/></div>
+                                <div><span>Sales 30d</span><field name="revenue_30d" widget="monetary"/></div>
+                            </div>
+                        </div>
+                    </div>
+                    <group>
+                        <group string="Amazon">
+                            <field name="account_id"/>
+                            <field name="marketplace_id"/>
+                            <field name="asin"/>
+                            <field name="fnsku"/>
+                            <field name="product_type"/>
+                            <field name="fulfillment" widget="radio" options="{'horizontal': true}"/>
+                            <field name="condition"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Odoo">
+                            <field name="product_id"/>
+                            <field name="cost"/>
+                            <field name="push_enabled" widget="boolean_toggle" invisible="fulfillment != 'fbm'"/>
+                            <field name="amazon_qty"/>
+                            <field name="odoo_qty"/>
+                            <field name="qty_to_push" invisible="fulfillment != 'fbm'"/>
+                            <field name="stock_health" widget="badge"
+                                   decoration-success="stock_health == 'ok'" decoration-danger="stock_health in ('oversell', 'unmapped')"
+                                   decoration-warning="stock_health == 'under'" decoration-info="stock_health == 'fba'"/>
+                            <field name="last_push"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-danger" role="status" invisible="not push_error"><field name="push_error"/></div>
+                    <notebook>
+                        <page string="Recent orders" name="orders">
+                            <field name="order_line_ids" readonly="1">
+                                <list>
+                                    <field name="order_id"/>
+                                    <field name="quantity"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="subtotal" sum="Total"/>
+                                    <field name="cost" sum="Cost"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amazon_listing_search" model="ir.ui.view">
+        <field name="name">chi.amazon.listing.search</field>
+        <field name="model">chi.amazon.listing</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="seller_sku" filter_domain="['|', '|', ('seller_sku', 'ilike', self), ('asin', 'ilike', self), ('title', 'ilike', self)]" string="SKU / ASIN / Title"/>
+                <field name="product_id"/>
+                <field name="account_id"/>
+                <filter name="unmapped" string="Not mapped" domain="[('product_id', '=', False)]"/>
+                <filter name="oversell" string="Oversell risk" domain="[('stock_health', '=', 'oversell')]"/>
+                <filter name="under" string="Under-listed" domain="[('stock_health', '=', 'under')]"/>
+                <separator/>
+                <filter name="fba" string="FBA" domain="[('fulfillment', '=', 'fba')]"/>
+                <filter name="fbm" string="FBM" domain="[('fulfillment', '=', 'fbm')]"/>
+                <separator/>
+                <filter name="active_listing" string="Active" domain="[('status', '=', 'active')]"/>
+                <filter name="selling" string="Sold in 30 days" domain="[('units_30d', '>', 0)]"/>
+                <group>
+                    <filter name="g_marketplace" string="Marketplace" context="{'group_by': 'marketplace_id'}"/>
+                    <filter name="g_fulfillment" string="Fulfillment" context="{'group_by': 'fulfillment'}"/>
+                    <filter name="g_status" string="Status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_amazon_listing" model="ir.actions.act_window">
+        <field name="name">Listings</field>
+        <field name="res_model">chi.amazon.listing</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No listings yet</p>
+            <p>Sync your account to pull every SKU, price and quantity from Seller Central.</p>
+        </field>
+    </record>
+</odoo>

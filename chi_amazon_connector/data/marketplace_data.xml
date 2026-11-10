@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="marketplace_us" model="chi.amazon.marketplace">
+        <field name="name">Amazon.com (US)</field><field name="code">ATVPDKIKX0DER</field><field name="domain">amazon.com</field>
+        <field name="region">na</field><field name="sequence">0</field>
+        <field name="country_id" ref="base.us"/><field name="currency_id" ref="base.USD"/>
+    </record>
+    <record id="marketplace_ca" model="chi.amazon.marketplace">
+        <field name="name">Amazon.ca (Canada)</field><field name="code">A2EUQ1WTGCTBG2</field><field name="domain">amazon.ca</field>
+        <field name="region">na</field><field name="sequence">1</field>
+        <field name="country_id" ref="base.ca"/><field name="currency_id" ref="base.CAD"/>
+    </record>
+    <record id="marketplace_mx" model="chi.amazon.marketplace">
+        <field name="name">Amazon.com.mx (Mexico)</field><field name="code">A1AM78C64UM0Y8</field><field name="domain">amazon.com.mx</field>
+        <field name="region">na</field><field name="sequence">2</field>
+        <field name="country_id" ref="base.mx"/><field name="currency_id" ref="base.MXN"/>
+    </record>
+    <record id="marketplace_br" model="chi.amazon.marketplace">
+        <field name="name">Amazon.com.br (Brazil)</field><field name="code">A2Q3Y263D00KWC</field><field name="domain">amazon.com.br</field>
+        <field name="region">na</field><field name="sequence">3</field>
+        <field name="country_id" ref="base.br"/><field name="currency_id" ref="base.BRL"/>
+    </record>
+    <record id="marketplace_eg" model="chi.amazon.marketplace">
+        <field name="name">Amazon.eg (Egypt)</field><field name="code">ARBP9OOSHTCHU</field><field name="domain">amazon.eg</field>
+        <field name="region">eu</field><field name="sequence">4</field>
+        <field name="country_id" ref="base.eg"/><field name="currency_id" ref="base.EGP"/>
+    </record>
+    <record id="marketplace_sa" model="chi.amazon.marketplace">
+        <field name="name">Amazon.sa (Saudi Arabia)</field><field name="code">A17E79C6D8DWNP</field><field name="domain">amazon.sa</field>
+        <field name="region">eu</field><field name="sequence">5</field>
+        <field name="country_id" ref="base.sa"/><field name="currency_id" ref="base.SAR"/>
+    </record>
+    <record id="marketplace_ae" model="chi.amazon.marketplace">
+        <field name="name">Amazon.ae (UAE)</field><field name="code">A2VIGQ35RCS4UG</field><field name="domain">amazon.ae</field>
+        <field name="region">eu</field><field name="sequence">6</field>
+        <field name="country_id" ref="base.ae"/><field name="currency_id" ref="base.AED"/>
+    </record>
+    <record id="marketplace_uk" model="chi.amazon.marketplace">
+        <field name="name">Amazon.co.uk (UK)</field><field name="code">A1F83G8C2ARO7P</field><field name="domain">amazon.co.uk</field>
+        <field name="region">eu</field><field name="sequence">7</field>
+        <field name="country_id" ref="base.uk"/><field name="currency_id" ref="base.GBP"/>
+    </record>
+    <record id="marketplace_de" model="chi.amazon.marketplace">
+        <field name="name">Amazon.de (Germany)</field><field name="code">A1PA6795UKMFR9</field><field name="domain">amazon.de</field>
+        <field name="region">eu</field><field name="sequence">8</field>
+        <field name="country_id" ref="base.de"/><field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="marketplace_fr" model="chi.amazon.marketplace">
+        <field name="name">Amazon.fr (France)</field><field name="code">A13V1IB3VIYZZH</field><field name="domain">amazon.fr</field>
+        <field name="region">eu</field><field name="sequence">9</field>
+        <field name="country_id" ref="base.fr"/><field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="marketplace_it" model="chi.amazon.marketplace">
+        <field name="name">Amazon.it (Italy)</field><field name="code">APJ6JRA9NG5V4</field><field name="domain">amazon.it</field>
+        <field name="region">eu</field><field name="sequence">10</field>
+        <field name="country_id" ref="base.it"/><field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="marketplace_es" model="chi.amazon.marketplace">
+        <field name="name">Amazon.es (Spain)</field><field name="code">A1RKKUPIHCS9HS</field><field name="domain">amazon.es</field>
+        <field name="region">eu</field><field name="sequence">11</field>
+        <field name="country_id" ref="base.es"/><field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="marketplace_nl" model="chi.amazon.marketplace">
+        <field name="name">Amazon.nl (Netherlands)</field><field name="code">A1805IZSGTT6HS</field><field name="domain">amazon.nl</field>
+        <field name="region">eu</field><field name="sequence">12</field>
+        <field name="country_id" ref="base.nl"/><field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="marketplace_be" model="chi.amazon.marketplace">
+        <field name="name">Amazon.com.be (Belgium)</field><field name="code">AMEN7PMS3EDWL</field><field name="domain">amazon.com.be</field>
+        <field name="region">eu</field><field name="sequence">13</field>
+        <field name="country_id" ref="base.be"/><field name="currency_id" ref="base.EUR"/>
+    </record>
+    <record id="marketplace_se" model="chi.amazon.marketplace">
+        <field name="name">Amazon.se (Sweden)</field><field name="code">A2NODRKZP88ZB9</field><field name="domain">amazon.se</field>
+        <field name="region">eu</field><field name="sequence">14</field>
+        <field name="country_id" ref="base.se"/><field name="currency_id" ref="base.SEK"/>
+    </record>
+    <record id="marketplace_pl" model="chi.amazon.marketplace">
+        <field name="name">Amazon.pl (Poland)</field><field name="code">A1C3SOZRARQ6R3</field><field name="domain">amazon.pl</field>
+        <field name="region">eu</field><field name="sequence">15</field>
+        <field name="country_id" ref="base.pl"/><field name="currency_id" ref="base.PLN"/>
+    </record>
+    <record id="marketplace_tr" model="chi.amazon.marketplace">
+        <field name="name">Amazon.com.tr (Turkey)</field><field name="code">A33AVAJ2PDY3EV</field><field name="domain">amazon.com.tr</field>
+        <field name="region">eu</field><field name="sequence">16</field>
+        <field name="country_id" ref="base.tr"/><field name="currency_id" ref="base.TRY"/>
+    </record>
+    <record id="marketplace_in" model="chi.amazon.marketplace">
+        <field name="name">Amazon.in (India)</field><field name="code">A21TJRUUN4KGV</field><field name="domain">amazon.in</field>
+        <field name="region">eu</field><field name="sequence">17</field>
+        <field name="country_id" ref="base.in"/><field name="currency_id" ref="base.INR"/>
+    </record>
+    <record id="marketplace_jp" model="chi.amazon.marketplace">
+        <field name="name">Amazon.co.jp (Japan)</field><field name="code">A1VC38T7YXB528</field><field name="domain">amazon.co.jp</field>
+        <field name="region">fe</field><field name="sequence">18</field>
+        <field name="country_id" ref="base.jp"/><field name="currency_id" ref="base.JPY"/>
+    </record>
+    <record id="marketplace_au" model="chi.amazon.marketplace">
+        <field name="name">Amazon.com.au (Australia)</field><field name="code">A39IBJ37TRP1C6</field><field name="domain">amazon.com.au</field>
+        <field name="region">fe</field><field name="sequence">19</field>
+        <field name="country_id" ref="base.au"/><field name="currency_id" ref="base.AUD"/>
+    </record>
+    <record id="marketplace_sg" model="chi.amazon.marketplace">
+        <field name="name">Amazon.sg (Singapore)</field><field name="code">A19VAU5U5O7RUS</field><field name="domain">amazon.sg</field>
+        <field name="region">fe</field><field name="sequence">20</field>
+        <field name="country_id" ref="base.sg"/><field name="currency_id" ref="base.SGD"/>
+    </record>
+</odoo>

@@ -1,0 +1,292 @@
+// Amazon Seller Hub — dashboard
+// Built on Bootstrap CSS variables so light and dark mode both work.
+
+.o_amz_dash {
+    --amz-navy: #0f1b2d;
+    --amz-navy-2: #1c2f4a;
+    --amz-accent: #f59e0b;
+    --amz-blue: #2563eb;
+    --amz-green: #10b981;
+    --amz-red: #ef4444;
+    --amz-violet: #8b5cf6;
+    --amz-radius: 14px;
+    --amz-card: #{$o-view-background-color};
+    --amz-muted: #{$o-gray-600};
+    --amz-line: #{$o-gray-200};
+    --amz-soft: #{$o-gray-100};
+    --amz-text: #{$o-main-text-color};
+
+    height: 100%;
+    overflow: auto;
+    background: #{$o-webclient-background-color};
+    color: var(--amz-text);
+    transition: opacity .2s;
+
+    &.o_amz_busy .o_amz_body { opacity: .55; pointer-events: none; }
+
+    h1, h2, h3 { margin: 0; }
+    h3 { font-size: 0.95rem; font-weight: 600; }
+}
+
+// ---------------------------------------------------------------- hero
+.o_amz_hero {
+    position: relative;
+    padding: 22px 28px 64px;
+    color: #fff;
+    background:
+        radial-gradient(1200px 300px at 85% -40%, rgba(245, 158, 11, .35), transparent 60%),
+        radial-gradient(800px 260px at 0% 120%, rgba(37, 99, 235, .45), transparent 60%),
+        linear-gradient(135deg, var(--amz-navy), var(--amz-navy-2));
+
+    .o_amz_hero_inner { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
+    .o_amz_hero_title { display: flex; align-items: center; gap: 14px; }
+    h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -.02em; color: #fff; }
+    .o_amz_eyebrow { font-size: .78rem; opacity: .7; text-transform: uppercase; letter-spacing: .08em; }
+    .o_amz_logo {
+        width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-size: 1.35rem;
+        background: linear-gradient(135deg, var(--amz-accent), #fb7185); box-shadow: 0 8px 24px rgba(245, 158, 11, .35);
+    }
+    .o_amz_hero_actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .o_amz_hero_meta { position: absolute; left: 28px; bottom: 26px; font-size: .78rem; opacity: .65; }
+}
+
+.o_amz_seg {
+    display: inline-flex; padding: 3px; border-radius: 10px; background: rgba(255, 255, 255, .1);
+    backdrop-filter: blur(6px);
+    button {
+        border: 0; background: transparent; color: rgba(255, 255, 255, .75); padding: 5px 12px; border-radius: 8px;
+        font-size: .8rem; font-weight: 600; transition: all .15s;
+        &:hover { color: #fff; }
+        &.active { background: #fff; color: var(--amz-navy); box-shadow: 0 2px 8px rgba(0, 0, 0, .15); }
+    }
+}
+
+.o_amz_sync_btn {
+    border: 0; border-radius: 10px; padding: 7px 16px; font-weight: 600; font-size: .85rem; color: var(--amz-navy);
+    background: var(--amz-accent); display: inline-flex; gap: 8px; align-items: center;
+    box-shadow: 0 6px 18px rgba(245, 158, 11, .35); transition: transform .15s, box-shadow .15s;
+    &:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(245, 158, 11, .45); }
+    &:disabled { opacity: .7; }
+}
+
+.o_amz_accounts {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;
+    button {
+        border: 1px solid rgba(255, 255, 255, .18); background: transparent; color: rgba(255, 255, 255, .8);
+        border-radius: 999px; padding: 3px 12px; font-size: .78rem; display: inline-flex; align-items: center; gap: 6px;
+        &.active { background: rgba(255, 255, 255, .16); color: #fff; border-color: rgba(255, 255, 255, .4); }
+    }
+}
+.o_amz_dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #94a3b8;
+    &.connected { background: var(--amz-green); box-shadow: 0 0 0 3px rgba(16, 185, 129, .25); }
+    &.error { background: var(--amz-red); box-shadow: 0 0 0 3px rgba(239, 68, 68, .25); }
+}
+
+// ---------------------------------------------------------------- layout
+.o_amz_body { padding: 0 28px 32px; margin-top: -44px; position: relative; z-index: 1; transition: opacity .2s; }
+.o_amz_grid { display: grid; gap: 16px; margin-bottom: 16px; }
+.o_amz_kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.o_amz_row_main { grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr); }
+.o_amz_row_half { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.o_amz_side { display: grid; gap: 16px; align-content: start; }
+
+@media (max-width: 1400px) { .o_amz_kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1100px) {
+    .o_amz_row_main, .o_amz_row_half { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+    .o_amz_kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .o_amz_body { padding: 0 12px 24px; }
+    .o_amz_hero { padding: 18px 14px 60px; }
+}
+
+.o_amz_card {
+    background: var(--amz-card); border-radius: var(--amz-radius); padding: 18px;
+    border: 1px solid var(--amz-line);
+    box-shadow: 0 1px 2px rgba(15, 27, 45, .04), 0 8px 24px rgba(15, 27, 45, .05);
+}
+.o_amz_card_head {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 14px;
+}
+.o_amz_link {
+    cursor: pointer; font-size: .8rem; font-weight: 600; color: var(--amz-blue) !important; white-space: nowrap;
+    i { transition: transform .15s; }
+    &:hover i { transform: translateX(3px); }
+}
+.o_amz_empty { color: var(--amz-muted); text-align: center; padding: 28px 8px; font-size: .85rem; }
+.o_amz_empty_good { color: var(--amz-green); }
+
+.o_amz_skel {
+    height: 120px; background: linear-gradient(90deg, var(--amz-soft) 25%, var(--amz-card) 50%, var(--amz-soft) 75%);
+    background-size: 200% 100%; animation: o_amz_shimmer 1.2s infinite;
+}
+@keyframes o_amz_shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+// ---------------------------------------------------------------- attention
+.o_amz_attention {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 16px;
+    padding: 10px 12px; border-radius: var(--amz-radius); background: var(--amz-card); border: 1px solid var(--amz-line);
+    box-shadow: 0 8px 24px rgba(15, 27, 45, .06);
+}
+.o_amz_attention_title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--amz-muted); margin-right: 4px; }
+.o_amz_all_good { color: var(--amz-green); font-weight: 600; }
+.o_amz_chip {
+    --c: var(--amz-blue);
+    display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 4px 6px 4px 4px;
+    border: 1px solid color-mix(in srgb, var(--c) 30%, transparent); font-size: .8rem;
+    background: color-mix(in srgb, var(--c) 8%, transparent); color: var(--amz-text); transition: all .15s;
+    b { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center;
+        background: var(--c); color: #fff; font-size: .75rem; }
+    i { opacity: .5; margin: 0 2px; }
+    &:hover { background: color-mix(in srgb, var(--c) 16%, transparent); transform: translateY(-1px); }
+    &.danger { --c: var(--amz-red); }
+    &.warning { --c: var(--amz-accent); }
+    &.info { --c: var(--amz-blue); }
+}
+
+// ---------------------------------------------------------------- KPIs
+.o_amz_kpi {
+    cursor: pointer; position: relative; overflow: hidden; transition: transform .15s, box-shadow .15s;
+    &::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 3px; background: var(--k, var(--amz-blue)); }
+    &:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(15, 27, 45, .1); }
+    &.o_amz_kpi_sales { --k: var(--amz-blue); }
+    &.o_amz_kpi_orders { --k: var(--amz-violet); }
+    &.o_amz_kpi_aov { --k: #06b6d4; }
+    &.o_amz_kpi_fees { --k: var(--amz-accent); }
+    &.o_amz_kpi_margin { --k: var(--amz-green); }
+    &.o_amz_kpi_refunds { --k: var(--amz-red); }
+}
+.o_amz_kpi_head { display: flex; justify-content: space-between; align-items: center; }
+.o_amz_kpi_label { font-size: .78rem; font-weight: 600; color: var(--amz-muted); text-transform: uppercase; letter-spacing: .05em; }
+.o_amz_kpi_value { font-size: 1.65rem; font-weight: 700; letter-spacing: -.02em; margin: 8px 0 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.o_amz_kpi_foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; min-height: 34px; }
+.o_amz_kpi_sub { font-size: .78rem; color: var(--amz-muted); }
+.o_amz_spark {
+    width: 46%; height: 34px; flex-shrink: 0;
+    .line { fill: none; stroke: var(--k); stroke-width: 2; vector-effect: non-scaling-stroke; }
+    .area { fill: color-mix(in srgb, var(--k) 14%, transparent); }
+}
+.o_amz_delta {
+    font-size: .72rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+    &.up { color: #047857; background: rgba(16, 185, 129, .14); }
+    &.down { color: #b91c1c; background: rgba(239, 68, 68, .12); }
+    &.flat { color: var(--amz-muted); background: var(--amz-soft); }
+}
+
+// ---------------------------------------------------------------- charts
+.o_amz_chart_wrap { position: relative; height: 300px; }
+.o_amz_donut_wrap { display: flex; gap: 16px; align-items: center; }
+.o_amz_donut {
+    position: relative; width: 130px; height: 130px; flex-shrink: 0;
+    .o_amz_donut_center { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none;
+        b { font-size: 1.1rem; } span { font-size: .7rem; color: var(--amz-muted); } }
+}
+.o_amz_legend {
+    list-style: none; margin: 0; padding: 0; flex: 1; min-width: 0; font-size: .82rem;
+    li { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+    i { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+    span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
+.o_amz_health_bar {
+    display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--amz-soft); gap: 2px; margin-bottom: 12px;
+    i { display: block; height: 100%; }
+}
+.o_amz_health_list {
+    list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; font-size: .82rem;
+    li { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 6px; border-radius: 8px;
+         &:hover { background: var(--amz-soft); } span { flex: 1; } }
+    i { width: 9px; height: 9px; border-radius: 50%; }
+}
+.o_amz_health_bar, .o_amz_health_list {
+    .ok { background: var(--amz-green); }
+    .warn { background: var(--amz-accent); }
+    .bad { background: var(--amz-red); }
+    .info { background: var(--amz-blue); }
+    .muted { background: #94a3b8; }
+}
+
+// ---------------------------------------------------------------- tables
+.o_amz_table { font-size: .84rem; }
+.o_amz_tr {
+    display: grid; grid-template-columns: minmax(0, 1fr) 56px 96px 120px; gap: 10px; align-items: center;
+    padding: 8px 6px; border-radius: 10px; cursor: pointer;
+    > span:not(.o_amz_prod):not(:first-child) { text-align: right; font-variant-numeric: tabular-nums; }
+    &:not(.o_amz_th):hover { background: var(--amz-soft); }
+}
+.o_amz_problems .o_amz_tr { grid-template-columns: minmax(0, 1fr) 46px 66px 130px; }
+.o_amz_th {
+    cursor: default; font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700;
+    color: var(--amz-muted); border-bottom: 1px solid var(--amz-line); border-radius: 0; padding-bottom: 6px;
+}
+.o_amz_prod {
+    display: flex; align-items: center; gap: 10px; min-width: 0;
+    img, .o_amz_noimg { width: 38px; height: 38px; border-radius: 8px; object-fit: contain; background: #fff;
+        border: 1px solid var(--amz-line); flex-shrink: 0; }
+    .o_amz_noimg { display: grid; place-items: center; color: var(--amz-muted); background: var(--amz-soft); }
+}
+.o_amz_prod_txt {
+    display: flex; flex-direction: column; min-width: 0;
+    b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    small { color: var(--amz-muted); font-family: var(--bs-font-monospace); font-size: .72rem; }
+}
+.o_amz_rank {
+    width: 20px; text-align: center; font-weight: 700; color: var(--amz-muted); flex-shrink: 0; font-size: .78rem;
+}
+.o_amz_bar {
+    display: flex !important; align-items: center; gap: 8px; justify-content: flex-end;
+    &::before { content: ""; }
+    i { display: block; height: 6px; border-radius: 999px; max-width: 60px; }
+    i.ok { background: var(--amz-green); } i.warn { background: var(--amz-accent); } i.bad { background: var(--amz-red); }
+    b { width: 38px; text-align: right; font-weight: 600; }
+}
+.o_amz_pill {
+    display: inline-block; font-size: .72rem; font-weight: 600; padding: 2px 9px; border-radius: 999px; white-space: nowrap;
+    &.ok { color: #047857; background: rgba(16, 185, 129, .14); }
+    &.info { color: #1d4ed8; background: rgba(37, 99, 235, .12); }
+    &.warning { color: #b45309; background: rgba(245, 158, 11, .16); }
+    &.danger { color: #b91c1c; background: rgba(239, 68, 68, .12); }
+}
+
+// ---------------------------------------------------------------- lists
+.o_amz_timeline, .o_amz_activity { list-style: none; margin: 0; padding: 0; }
+.o_amz_timeline li {
+    display: flex; align-items: center; gap: 14px; padding: 10px 6px; border-radius: 10px; cursor: pointer;
+    &:hover { background: var(--amz-soft); }
+    & + li { border-top: 1px dashed var(--amz-line); }
+}
+.o_amz_tl_date {
+    width: 52px; text-align: center; font-size: .75rem; font-weight: 700; color: var(--amz-muted);
+    background: var(--amz-soft); border-radius: 8px; padding: 6px 0;
+}
+.o_amz_tl_main { flex: 1; display: flex; flex-direction: column; b { font-size: 1rem; } small { color: var(--amz-muted); } }
+.o_amz_activity li {
+    display: flex; align-items: center; gap: 12px; padding: 8px 4px;
+    & + li { border-top: 1px dashed var(--amz-line); }
+}
+.o_amz_act_icon {
+    width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; flex-shrink: 0;
+    &.done { color: #047857; background: rgba(16, 185, 129, .14); }
+    &.error { color: #b91c1c; background: rgba(239, 68, 68, .12); }
+    &.running { color: #1d4ed8; background: rgba(37, 99, 235, .12); }
+}
+.o_amz_act_txt { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: .84rem;
+    small { color: var(--amz-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } }
+.o_amz_act_time { font-size: .75rem; color: var(--amz-muted); white-space: nowrap; }
+
+// ---------------------------------------------------------------- onboarding
+.o_amz_onboarding {
+    max-width: 680px; margin: 0 auto; text-align: center; padding: 40px 32px;
+    h2 { font-size: 1.4rem; font-weight: 700; margin: 16px 0 24px; }
+    .o_amz_onb_icon { width: 64px; height: 64px; margin: 0 auto; border-radius: 18px; display: grid; place-items: center;
+        font-size: 1.8rem; color: #fff; background: linear-gradient(135deg, var(--amz-accent), #fb7185); }
+}
+.o_amz_steps {
+    text-align: left; list-style: none; counter-reset: s; padding: 0; margin: 0 0 28px; display: grid; gap: 12px;
+    li { counter-increment: s; display: grid; grid-template-columns: 36px 1fr; grid-template-rows: auto auto; column-gap: 12px;
+        padding: 12px; border-radius: 12px; background: var(--amz-soft);
+        &::before { content: counter(s); grid-row: span 2; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+            background: var(--amz-navy); color: #fff; font-weight: 700; }
+        span { color: var(--amz-muted); font-size: .85rem; } }
+}

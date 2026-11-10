@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="privilege_amazon" model="res.groups.privilege">
+        <field name="name">Amazon Seller Hub</field>
+        <field name="category_id" ref="base.module_category_sales"/>
+    </record>
+
+    <record id="group_amazon_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="privilege_amazon"/>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+
+    <record id="group_amazon_manager" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="privilege_amazon"/>
+        <field name="implied_ids" eval="[(4, ref('group_amazon_user'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- multi-company -->
+    <record id="rule_amazon_account_company" model="ir.rule">
+        <field name="name">Amazon account: multi-company</field>
+        <field name="model_id" ref="model_chi_amazon_account"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_amazon_order_company" model="ir.rule">
+        <field name="name">Amazon order: multi-company</field>
+        <field name="model_id" ref="model_chi_amazon_order"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_amazon_listing_company" model="ir.rule">
+        <field name="name">Amazon listing: multi-company</field>
+        <field name="model_id" ref="model_chi_amazon_listing"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_amazon_settlement_company" model="ir.rule">
+        <field name="name">Amazon settlement: multi-company</field>
+        <field name="model_id" ref="model_chi_amazon_settlement"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_amazon_return_company" model="ir.rule">
+        <field name="name">Amazon return: multi-company</field>
+        <field name="model_id" ref="model_chi_amazon_return"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_amazon_fba_company" model="ir.rule">
+        <field name="name">Amazon FBA inventory: multi-company</field>
+        <field name="model_id" ref="model_chi_amazon_fba_inventory"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_amazon_log_company" model="ir.rule">
+        <field name="name">Amazon sync log: multi-company</field>
+        <field name="model_id" ref="model_chi_amazon_sync_log"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

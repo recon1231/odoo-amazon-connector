@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function model="chi.amazon.demo" name="_create_demo_data"/>
+</odoo>

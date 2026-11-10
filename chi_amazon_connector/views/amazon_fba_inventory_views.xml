@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_fba_list" model="ir.ui.view">
+        <field name="name">chi.amazon.fba.inventory.list</field>
+        <field name="model">chi.amazon.fba.inventory</field>
+        <field name="arch" type="xml">
+            <list class="o_amz_list" create="0" decoration-danger="difference != 0" decoration-muted="total == 0">
+                <field name="seller_sku" class="fw-bold"/>
+                <field name="title" optional="show"/>
+                <field name="product_id" optional="show"/>
+                <field name="marketplace_id" optional="hide"/>
+                <field name="fulfillable" sum="Fulfillable"/>
+                <field name="inbound_total" sum="Inbound"/>
+                <field name="reserved" sum="Reserved" optional="show"/>
+                <field name="unfulfillable" sum="Unfulfillable" optional="show"/>
+                <field name="researching" optional="hide"/>
+                <field name="total" sum="Total"/>
+                <field name="odoo_qty"/>
+                <field name="difference"/>
+                <field name="days_of_cover" widget="float" digits="[16,0]" optional="show"/>
+                <field name="last_sync" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_amazon_fba_search" model="ir.ui.view">
+        <field name="name">chi.amazon.fba.inventory.search</field>
+        <field name="model">chi.amazon.fba.inventory</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="seller_sku" filter_domain="['|', '|', ('seller_sku', 'ilike', self), ('asin', 'ilike', self), ('fnsku', 'ilike', self)]" string="SKU / ASIN / FNSKU"/>
+                <field name="product_id"/>
+                <filter name="in_stock" string="In stock" domain="[('fulfillable', '>', 0)]"/>
+                <filter name="inbound" string="Inbound" domain="[('inbound_total', '>', 0)]"/>
+                <filter name="unfulfillable" string="Unfulfillable" domain="[('unfulfillable', '>', 0)]"/>
+                <group><filter name="g_marketplace" string="Marketplace" context="{'group_by': 'marketplace_id'}"/></group>
+            </search>
+        </field>
+    </record>
+    <record id="action_amazon_fba" model="ir.actions.act_window">
+        <field name="name">FBA Inventory</field>
+        <field name="res_model">chi.amazon.fba.inventory</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

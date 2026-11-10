@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_amazon_root" name="Amazon Hub" sequence="35"
+              web_icon="chi_amazon_connector,static/description/icon.png"
+              groups="group_amazon_user"/>
+    <menuitem id="menu_amazon_dashboard" name="Dashboard" parent="menu_amazon_root" action="action_amazon_dashboard" sequence="1"/>
+    <menuitem id="menu_amazon_orders" name="Orders" parent="menu_amazon_root" action="action_amazon_order" sequence="10"/>
+    <menuitem id="menu_amazon_catalog" name="Catalog" parent="menu_amazon_root" sequence="20"/>
+    <menuitem id="menu_amazon_listings" name="Listings" parent="menu_amazon_catalog" action="action_amazon_listing" sequence="1"/>
+    <menuitem id="menu_amazon_fba" name="FBA Inventory" parent="menu_amazon_catalog" action="action_amazon_fba" sequence="2"/>
+    <menuitem id="menu_amazon_returns" name="Returns" parent="menu_amazon_root" action="action_amazon_return" sequence="30"/>
+    <menuitem id="menu_amazon_settlements" name="Payouts" parent="menu_amazon_root" action="action_amazon_settlement" sequence="40"/>
+    <menuitem id="menu_amazon_reporting" name="Reporting" parent="menu_amazon_root" sequence="50"/>
+    <menuitem id="menu_amazon_analysis" name="Sales Analysis" parent="menu_amazon_reporting" action="action_amazon_order_analysis" sequence="1"/>
+    <menuitem id="menu_amazon_log" name="Sync Log" parent="menu_amazon_reporting" action="action_amazon_sync_log" sequence="2"/>
+    <menuitem id="menu_amazon_config" name="Configuration" parent="menu_amazon_root" sequence="90" groups="group_amazon_manager"/>
+    <menuitem id="menu_amazon_accounts" name="Seller Accounts" parent="menu_amazon_config" action="action_amazon_account" sequence="1"/>
+    <menuitem id="menu_amazon_marketplaces" name="Marketplaces" parent="menu_amazon_config" action="action_amazon_marketplace" sequence="2"/>
+    <menuitem id="menu_amazon_sync_now" name="Sync Now" parent="menu_amazon_config" action="action_amazon_sync_wizard" sequence="3"/>
+</odoo>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_return_kanban" model="ir.ui.view">
+        <field name="name">chi.amazon.return.kanban</field>
+        <field name="model">chi.amazon.return</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_amz_return_kanban" quick_create="0">
+                <field name="currency_id"/>
+                <field name="activity_state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex justify-content-between">
+                            <field name="amazon_order_ref" class="fw-bold"/>
+                            <field name="fulfillment" widget="badge" decoration-info="fulfillment == 'fba'" decoration-warning="fulfillment == 'fbm'"/>
+                        </div>
+                        <field name="seller_sku" class="small text-muted"/>
+                        <div class="d-flex gap-2 mt-2 flex-wrap">
+                            <field name="reason" widget="badge"/>
+                            <field name="disposition" widget="badge" decoration-success="disposition == 'sellable'"
+                                   decoration-danger="disposition in ('damaged', 'customer_damaged', 'defective', 'carrier_damaged')"/>
+                        </div>
+                        <footer class="mt-2">
+                            <field name="activity_ids" widget="kanban_activity"/>
+                            <span class="ms-auto fw-bold"><field name="refund_amount" widget="monetary"/></span>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_amazon_return_list" model="ir.ui.view">
+        <field name="name">chi.amazon.return.list</field>
+        <field name="model">chi.amazon.return</field>
+        <field name="arch" type="xml">
+            <list class="o_amz_list">
+                <field name="return_date"/>
+                <field name="name"/>
+                <field name="amazon_order_ref"/>
+                <field name="seller_sku"/>
+                <field name="product_id" optional="show"/>
+                <field name="quantity"/>
+                <field name="reason" widget="badge"/>
+                <field name="disposition" widget="badge" decoration-success="disposition == 'sellable'"
+                       decoration-danger="disposition in ('damaged', 'customer_damaged', 'defective', 'carrier_damaged')"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="refund_amount" sum="Refunded"/>
+                <field name="reimbursed_amount" sum="Reimbursed" optional="show"/>
+                <field name="loss" sum="Loss" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'closed'" decoration-warning="state in ('new', 'to_receive')" decoration-danger="state == 'claim'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_amazon_return_form" model="ir.ui.view">
+        <field name="name">chi.amazon.return.form</field>
+        <field name="model">chi.amazon.return</field>
+        <field name="arch" type="xml">
+            <form class="o_amz_form">
+                <header>
+                    <button name="action_wait" type="object" string="Waiting for item" invisible="state != 'new'"/>
+                    <button name="action_receive" type="object" string="Received" class="btn-primary" invisible="state not in ('new', 'to_receive')"/>
+                    <button name="action_open_claim" type="object" string="Open claim" invisible="state in ('claim', 'closed')"/>
+                    <button name="action_close" type="object" string="Close" invisible="state == 'closed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,to_receive,received,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <div class="o_amz_money_cards my-3">
+                        <div class="o_amz_bad"><span>Refunded</span><field name="refund_amount" widget="monetary"/></div>
+                        <div class="o_amz_good"><span>Reimbursed</span><field name="reimbursed_amount" widget="monetary"/></div>
+                        <div><span>Net loss</span><field name="loss" widget="monetary"/></div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="account_id"/>
+                            <field name="amazon_order_ref"/>
+                            <field name="order_id"/>
+                            <field name="return_date"/>
+                            <field name="fulfillment" widget="radio" options="{'horizontal': true}"/>
+                        </group>
+                        <group>
+                            <field name="seller_sku"/>
+                            <field name="listing_id"/>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="reason"/>
+                            <field name="disposition"/>
+                        </group>
+                    </group>
+                    <field name="customer_comment" placeholder="Customer comment..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_amazon_return_search" model="ir.ui.view">
+        <field name="name">chi.amazon.return.search</field>
+        <field name="model">chi.amazon.return</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="amazon_order_ref"/>
+                <field name="seller_sku"/>
+                <filter name="open" string="Open" domain="[('state', '!=', 'closed')]"/>
+                <filter name="claims" string="Claims" domain="[('state', '=', 'claim')]"/>
+                <filter name="loss" string="With loss" domain="[('loss', '>', 0)]"/>
+                <group>
+                    <filter name="g_reason" string="Reason" context="{'group_by': 'reason'}"/>
+                    <filter name="g_sku" string="SKU" context="{'group_by': 'seller_sku'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_amazon_return" model="ir.actions.act_window">
+        <field name="name">Returns</field>
+        <field name="res_model">chi.amazon.return</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+</odoo>

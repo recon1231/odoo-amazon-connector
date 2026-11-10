@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_sync_log_list" model="ir.ui.view">
+        <field name="name">chi.amazon.sync.log.list</field>
+        <field name="model">chi.amazon.sync.log</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" class="o_amz_list" decoration-danger="state == 'error'">
+                <field name="date_start"/>
+                <field name="account_id"/>
+                <field name="operation" widget="badge"/>
+                <field name="record_count"/>
+                <field name="duration" widget="float" digits="[16,1]"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'" decoration-danger="state == 'error'" decoration-info="state == 'running'"/>
+                <field name="message"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_amazon_sync_log_search" model="ir.ui.view">
+        <field name="name">chi.amazon.sync.log.search</field>
+        <field name="model">chi.amazon.sync.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="account_id"/>
+                <filter name="errors" string="Errors" domain="[('state', '=', 'error')]"/>
+                <group><filter name="g_op" string="Operation" context="{'group_by': 'operation'}"/></group>
+            </search>
+        </field>
+    </record>
+    <record id="action_amazon_sync_log" model="ir.actions.act_window">
+        <field name="name">Sync Log</field>
+        <field name="res_model">chi.amazon.sync.log</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

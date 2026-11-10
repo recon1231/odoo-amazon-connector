@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_amazon_marketplace_list" model="ir.ui.view">
+        <field name="name">chi.amazon.marketplace.list</field>
+        <field name="model">chi.amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="domain"/>
+                <field name="region"/>
+                <field name="country_id"/>
+                <field name="currency_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_amazon_marketplace_search" model="ir.ui.view">
+        <field name="name">chi.amazon.marketplace.search</field>
+        <field name="model">chi.amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/><field name="code"/>
+                <filter name="inactive" string="Archived" domain="[('active', '=', False)]"/>
+                <group><filter name="g_region" string="Region" context="{'group_by': 'region'}"/></group>
+            </search>
+        </field>
+    </record>
+    <record id="action_amazon_marketplace" model="ir.actions.act_window">
+        <field name="name">Marketplaces</field>
+        <field name="res_model">chi.amazon.marketplace</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_g_region': 1}</field>
+    </record>
+</odoo>
