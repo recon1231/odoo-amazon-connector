@@ -2,46 +2,46 @@
 <templates xml:space="preserve">
 
 <t t-name="chi_amazon_connector.Dashboard">
-    <div class="o_amz_dash o_action" t-att-class="{'o_amz_busy': state.loading}">
-        <t t-set="d" t-value="state.data"/>
+    <div class="o_amz_dash o_action" t-att-class="{'o_amz_busy': this.state.loading}">
+        <t t-set="d" t-value="this.state.data"/>
 
         <!-- ============ HERO ============ -->
         <header class="o_amz_hero">
             <div class="o_amz_hero_inner">
                 <div class="o_amz_hero_title">
-                    <div class="o_amz_logo"><i class="fa fa-cubes"/></div>
+                    <div class="o_amz_logo"><i data-icon="deployed_code" class="oi"/></div>
                     <div>
-                        <div class="o_amz_eyebrow"><t t-esc="greeting"/> · <t t-esc="periodLabel"/></div>
+                        <div class="o_amz_eyebrow"><t t-esc="this.greeting"/> · <t t-esc="this.periodLabel"/></div>
                         <h1>Amazon Seller Hub</h1>
                     </div>
                 </div>
                 <div class="o_amz_hero_actions" t-if="d and d.accounts.length">
                     <div class="o_amz_seg">
-                        <button t-att-class="{'active': state.days === 7}" t-on-click="() => this.setDays(7)">7D</button>
-                        <button t-att-class="{'active': state.days === 30}" t-on-click="() => this.setDays(30)">30D</button>
-                        <button t-att-class="{'active': state.days === 90}" t-on-click="() => this.setDays(90)">90D</button>
+                        <button t-att-class="{'active': this.state.days === 7}" t-on-click="() => this.setDays(7)">7D</button>
+                        <button t-att-class="{'active': this.state.days === 30}" t-on-click="() => this.setDays(30)">30D</button>
+                        <button t-att-class="{'active': this.state.days === 90}" t-on-click="() => this.setDays(90)">90D</button>
                     </div>
                     <div class="o_amz_seg">
-                        <button t-att-class="{'active': state.fulfillment === 'all'}" t-on-click="() => this.setFulfillment('all')">All</button>
-                        <button t-att-class="{'active': state.fulfillment === 'fba'}" t-on-click="() => this.setFulfillment('fba')">FBA</button>
-                        <button t-att-class="{'active': state.fulfillment === 'fbm'}" t-on-click="() => this.setFulfillment('fbm')">FBM</button>
+                        <button t-att-class="{'active': this.state.fulfillment === 'all'}" t-on-click="() => this.setFulfillment('all')">All</button>
+                        <button t-att-class="{'active': this.state.fulfillment === 'fba'}" t-on-click="() => this.setFulfillment('fba')">FBA</button>
+                        <button t-att-class="{'active': this.state.fulfillment === 'fbm'}" t-on-click="() => this.setFulfillment('fbm')">FBM</button>
                     </div>
-                    <button class="o_amz_sync_btn" t-on-click="syncNow" t-att-disabled="state.syncing">
-                        <i t-att-class="'fa fa-refresh' + (state.syncing ? ' fa-spin' : '')"/>
+                    <button class="o_amz_sync_btn" t-on-click="() => this.syncNow()" t-att-disabled="this.state.syncing">
+                        <i class="oi" data-icon="refresh" t-att-class="{'o_amz_spin': this.state.syncing}"/>
                         <span>Sync now</span>
                     </button>
                 </div>
             </div>
             <div class="o_amz_accounts" t-if="d and d.accounts.length > 1">
-                <button t-att-class="{'active': !state.accountId}" t-on-click="() => this.setAccount(false)">All accounts</button>
+                <button t-att-class="{'active': !this.state.accountId}" t-on-click="() => this.setAccount(false)">All accounts</button>
                 <t t-foreach="d.accounts" t-as="acc" t-key="acc.id">
-                    <button t-att-class="{'active': state.accountId === acc.id}" t-on-click="() => this.setAccount(acc.id)">
+                    <button t-att-class="{'active': this.state.accountId === acc.id}" t-on-click="() => this.setAccount(acc.id)">
                         <span t-att-class="'o_amz_dot ' + acc.state"/><t t-esc="acc.name"/>
                     </button>
                 </t>
             </div>
             <div class="o_amz_hero_meta" t-if="d and d.accounts.length">
-                <i class="fa fa-clock-o me-1"/>Last sync <t t-esc="timeAgo(d.last_sync)"/>
+                <i data-icon="schedule" class="oi me-1"/>Last sync <t t-esc="this.timeAgo(d.last_sync)"/>
             </div>
         </header>
 
@@ -56,29 +56,29 @@
             <!-- ============ ONBOARDING ============ -->
             <t t-elif="!d.accounts.length">
                 <div class="o_amz_card o_amz_onboarding">
-                    <div class="o_amz_onb_icon"><i class="fa fa-plug"/></div>
+                    <div class="o_amz_onb_icon"><i data-icon="power" class="oi"/></div>
                     <h2>Connect your Amazon store in 3 steps</h2>
                     <ol class="o_amz_steps">
                         <li><b>Create an SP-API app</b><span>Seller Central → Apps &amp; Services → Develop Apps.</span></li>
                         <li><b>Authorize it</b><span>Copy the LWA client id, secret and refresh token.</span></li>
                         <li><b>Paste them in Odoo</b><span>Pick your marketplaces, click “Test connection”, done.</span></li>
                     </ol>
-                    <button class="btn btn-primary btn-lg" t-on-click="openSetup"><i class="fa fa-plus me-2"/>Add seller account</button>
+                    <button class="btn btn-primary btn-lg" t-on-click="() => this.openSetup()"><i data-icon="add" class="oi me-2"/>Add seller account</button>
                 </div>
             </t>
 
             <t t-else="">
                 <!-- ============ NEEDS ATTENTION ============ -->
                 <section class="o_amz_attention" t-if="d.attention.length">
-                    <span class="o_amz_attention_title"><i class="fa fa-bell-o me-1"/>Needs you</span>
+                    <span class="o_amz_attention_title"><i data-icon="notifications" class="oi me-1"/>Needs you</span>
                     <t t-foreach="d.attention" t-as="a" t-key="a.key">
                         <button t-att-class="'o_amz_chip ' + a.level" t-on-click="() => this.openAttention(a.key)">
-                            <b t-esc="a.count"/><span t-esc="a.label"/><i class="fa fa-angle-right"/>
+                            <b t-esc="a.count"/><span t-esc="a.label"/><i data-icon="chevron_right" class="oi"/>
                         </button>
                     </t>
                 </section>
                 <section class="o_amz_attention o_amz_all_good" t-else="">
-                    <i class="fa fa-check-circle me-2"/>Everything is in order — nothing needs your attention.
+                    <i data-icon="check_circle" class="oi me-2"/>Everything is in order — nothing needs your attention.
                 </section>
 
                 <!-- ============ KPIS ============ -->
@@ -87,14 +87,14 @@
                         <div t-att-class="'o_amz_card o_amz_kpi o_amz_kpi_' + k.key" t-on-click="() => this.openKpi(k.key)">
                             <div class="o_amz_kpi_head">
                                 <span class="o_amz_kpi_label" t-esc="k.label"/>
-                                <span t-att-class="'o_amz_delta ' + deltaClass(k)" t-esc="deltaLabel(k)"/>
+                                <span t-att-class="'o_amz_delta ' + this.deltaClass(k)" t-esc="this.deltaLabel(k)"/>
                             </div>
-                            <div class="o_amz_kpi_value" t-esc="kpiValue(k)"/>
+                            <div class="o_amz_kpi_value" t-esc="this.kpiValue(k)"/>
                             <div class="o_amz_kpi_foot">
                                 <span class="o_amz_kpi_sub" t-esc="k.sub"/>
                                 <svg t-if="k.spark" class="o_amz_spark" viewBox="0 0 120 34" preserveAspectRatio="none">
-                                    <path class="area" t-att-d="sparkArea(k.spark)"/>
-                                    <path class="line" t-att-d="sparkPath(k.spark)"/>
+                                    <path class="area" t-att-d="this.sparkArea(k.spark)"/>
+                                    <path class="line" t-att-d="this.sparkPath(k.spark)"/>
                                 </svg>
                             </div>
                         </div>
@@ -107,22 +107,22 @@
                         <div class="o_amz_card_head">
                             <div>
                                 <h3>Sales &amp; margin per day</h3>
-                                <span class="text-muted small" t-if="d.best_day">Best day: <t t-esc="shortDate(d.best_day)"/></span>
+                                <span class="text-muted small" t-if="d.best_day">Best day: <t t-esc="this.shortDate(d.best_day)"/></span>
                             </div>
-                            <a class="o_amz_link" t-on-click="() => this.action.doAction('chi_amazon_connector.action_amazon_order_analysis')">Analysis <i class="fa fa-arrow-right"/></a>
+                            <a class="o_amz_link" t-on-click="() => this.action.doAction('chi_amazon_connector.action_amazon_order_analysis')">Analysis <i data-icon="arrow_forward" class="oi"/></a>
                         </div>
-                        <div class="o_amz_chart_wrap"><canvas t-ref="salesChart"/></div>
+                        <div class="o_amz_chart_wrap"><canvas t-ref="this.salesChartRef"/></div>
                     </div>
                     <div class="o_amz_side">
                         <div class="o_amz_card">
                             <div class="o_amz_card_head"><h3>By marketplace</h3></div>
                             <div class="o_amz_donut_wrap" t-if="d.marketplaces.length">
-                                <div class="o_amz_donut"><canvas t-ref="donut"/>
-                                    <div class="o_amz_donut_center"><b t-esc="money(mkTotal, true)"/><span>total</span></div>
+                                <div class="o_amz_donut"><canvas t-ref="this.donutRef"/>
+                                    <div class="o_amz_donut_center"><b t-esc="this.money(this.mkTotal, true)"/><span>total</span></div>
                                 </div>
                                 <ul class="o_amz_legend">
                                     <t t-foreach="d.marketplaces" t-as="m" t-key="m.name">
-                                        <li><i t-att-style="'background:' + mkColor(m_index)"/><span t-esc="m.name"/><b t-esc="money(m.value, true)"/></li>
+                                        <li><i t-att-style="'background:' + this.mkColor(m_index)"/><span t-esc="m.name"/><b t-esc="this.money(m.value, true)"/></li>
                                     </t>
                                 </ul>
                             </div>
@@ -134,12 +134,12 @@
                                 <span class="text-muted small"><t t-esc="d.listing_total"/> listings</span>
                             </div>
                             <div class="o_amz_health_bar">
-                                <t t-foreach="health" t-as="h" t-key="h.key">
-                                    <i t-if="healthPct(h.key)" t-att-class="h.cls" t-att-style="'width:' + healthPct(h.key) + '%'"/>
+                                <t t-foreach="this.health" t-as="h" t-key="h.key">
+                                    <i t-if="this.healthPct(h.key)" t-att-class="h.cls" t-att-style="'width:' + this.healthPct(h.key) + '%'"/>
                                 </t>
                             </div>
                             <ul class="o_amz_health_list">
-                                <t t-foreach="health" t-as="h" t-key="h.key">
+                                <t t-foreach="this.health" t-as="h" t-key="h.key">
                                     <li t-if="d.health[h.key]" t-on-click="() => this.openHealth(h.key)">
                                         <i t-att-class="h.cls"/><span t-esc="h.label"/><b t-esc="d.health[h.key]"/>
                                     </li>
@@ -153,8 +153,8 @@
                 <section class="o_amz_grid o_amz_row_half">
                     <div class="o_amz_card">
                         <div class="o_amz_card_head">
-                            <h3><i class="fa fa-trophy text-warning me-2"/>Best sellers</h3>
-                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.listing', 'Listings', [], [[false, 'list'], [false, 'form']])">All listings <i class="fa fa-arrow-right"/></a>
+                            <h3><i data-icon="trophy" class="oi text-warning me-2"/>Best sellers</h3>
+                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.listing', 'Listings', [], [[false, 'list'], [false, 'form']])">All listings <i data-icon="arrow_forward" class="oi"/></a>
                         </div>
                         <div class="o_amz_table">
                             <div class="o_amz_tr o_amz_th"><span>Product</span><span>Units</span><span>Sales</span><span>Margin</span></div>
@@ -163,11 +163,11 @@
                                     <span class="o_amz_prod">
                                         <span class="o_amz_rank" t-esc="p_index + 1"/>
                                         <img t-if="p.image" t-att-src="p.image" alt=""/>
-                                        <i t-else="" class="fa fa-cube o_amz_noimg"/>
+                                        <i data-icon="inventory_2" t-else="" class="oi o_amz_noimg"/>
                                         <span class="o_amz_prod_txt"><b t-esc="p.title or p.sku"/><small t-esc="p.sku"/></span>
                                     </span>
                                     <span t-esc="p.units"/>
-                                    <span class="fw-semibold" t-esc="money(p.sales)"/>
+                                    <span class="fw-semibold" t-esc="this.money(p.sales)"/>
                                     <span t-if="p.no_cost"><span class="o_amz_pill warning">No cost</span></span>
                                     <span t-else="" class="o_amz_bar"><i t-att-style="'width:' + Math.max(0, Math.min(100, p.margin_pct)) + '%'"
                                              t-att-class="p.margin_pct &lt; 20 ? 'bad' : p.margin_pct &lt; 40 ? 'warn' : 'ok'"/><b t-esc="p.margin_pct + '%'"/></span>
@@ -178,8 +178,8 @@
                     </div>
                     <div class="o_amz_card">
                         <div class="o_amz_card_head">
-                            <h3><i class="fa fa-exclamation-triangle text-danger me-2"/>Problem products</h3>
-                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.return', 'Returns', [], [[false, 'kanban'], [false, 'list'], [false, 'form']])">Returns <i class="fa fa-arrow-right"/></a>
+                            <h3><i data-icon="warning" class="oi text-danger me-2"/>Problem products</h3>
+                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.return', 'Returns', [], [[false, 'kanban'], [false, 'list'], [false, 'form']])">Returns <i data-icon="arrow_forward" class="oi"/></a>
                         </div>
                         <div class="o_amz_table o_amz_problems">
                             <div class="o_amz_tr o_amz_th"><span>Product</span><span>Sold</span><span>Returned</span><span>Why</span></div>
@@ -187,7 +187,7 @@
                                 <div class="o_amz_tr" t-on-click="() => this.openRecord('chi.amazon.listing', p.id)">
                                     <span class="o_amz_prod">
                                         <img t-if="p.image" t-att-src="p.image" alt=""/>
-                                        <i t-else="" class="fa fa-cube o_amz_noimg"/>
+                                        <i data-icon="inventory_2" t-else="" class="oi o_amz_noimg"/>
                                         <span class="o_amz_prod_txt"><b t-esc="p.title or p.sku"/><small t-esc="p.sku"/></span>
                                     </span>
                                     <span t-esc="p.units"/>
@@ -195,7 +195,7 @@
                                     <span><span t-att-class="'o_amz_pill ' + p.why_level" t-esc="p.why"/></span>
                                 </div>
                             </t>
-                            <div class="o_amz_empty o_amz_empty_good" t-if="!d.problems.length"><i class="fa fa-smile-o me-2"/>No problem products</div>
+                            <div class="o_amz_empty o_amz_empty_good" t-if="!d.problems.length"><i data-icon="sentiment_satisfied" class="oi me-2"/>No problem products</div>
                         </div>
                     </div>
                 </section>
@@ -204,16 +204,16 @@
                 <section class="o_amz_grid o_amz_row_half">
                     <div class="o_amz_card">
                         <div class="o_amz_card_head">
-                            <h3><i class="fa fa-university me-2 text-success"/>Latest payouts</h3>
-                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.settlement', 'Payouts')">All payouts <i class="fa fa-arrow-right"/></a>
+                            <h3><i data-icon="account_balance" class="oi me-2 text-success"/>Latest payouts</h3>
+                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.settlement', 'Payouts')">All payouts <i data-icon="arrow_forward" class="oi"/></a>
                         </div>
                         <ul class="o_amz_timeline">
                             <t t-foreach="d.payouts" t-as="s" t-key="s.id">
                                 <li t-on-click="() => this.openRecord('chi.amazon.settlement', s.id)">
-                                    <span class="o_amz_tl_date" t-esc="shortDate(s.date)"/>
+                                    <span class="o_amz_tl_date" t-esc="this.shortDate(s.date)"/>
                                     <span class="o_amz_tl_main">
-                                        <b t-esc="money(s.amount)"/>
-                                        <small>fees <t t-esc="money(Math.abs(s.fees))"/></small>
+                                        <b t-esc="this.money(s.amount)"/>
+                                        <small>fees <t t-esc="this.money(Math.abs(s.fees))"/></small>
                                     </span>
                                     <span t-att-class="'o_amz_pill ' + (s.state === 'posted' ? 'ok' : s.state === 'entry' ? 'info' : 'warning')"
                                           t-esc="s.state === 'posted' ? 'Booked' : s.state === 'entry' ? 'Draft entry' : 'To book'"/>
@@ -224,21 +224,21 @@
                     </div>
                     <div class="o_amz_card">
                         <div class="o_amz_card_head">
-                            <h3><i class="fa fa-history me-2 text-info"/>Sync activity</h3>
-                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.sync.log', 'Sync Log', [], [[false, 'list']])">Log <i class="fa fa-arrow-right"/></a>
+                            <h3><i data-icon="history" class="oi me-2 text-info"/>Sync activity</h3>
+                            <a class="o_amz_link" t-on-click="() => this.openModel('chi.amazon.sync.log', 'Sync Log', [], [[false, 'list']])">Log <i data-icon="arrow_forward" class="oi"/></a>
                         </div>
                         <ul class="o_amz_activity">
                             <t t-foreach="d.logs" t-as="l" t-key="l.id">
                                 <li>
                                     <span t-att-class="'o_amz_act_icon ' + l.state">
-                                        <i t-att-class="'fa ' + (l.state === 'done' ? 'fa-check' : l.state === 'error' ? 'fa-times' : 'fa-circle-o-notch fa-spin')"/>
+                                        <i class="oi" t-att-data-icon="l.state === 'done' ? 'check' : l.state === 'error' ? 'close' : 'progress_activity'" t-att-class="{'o_amz_spin': l.state === 'running'}"/>
                                     </span>
                                     <span class="o_amz_act_txt">
                                         <b><t t-esc="l.operation"/> · <t t-esc="l.account"/></b>
                                         <small t-if="l.state === 'error'" class="text-danger" t-esc="l.message"/>
                                         <small t-else=""><t t-esc="l.records"/> records</small>
                                     </span>
-                                    <span class="o_amz_act_time" t-esc="timeAgo(l.date)"/>
+                                    <span class="o_amz_act_time" t-esc="this.timeAgo(l.date)"/>
                                 </li>
                             </t>
                             <li class="o_amz_empty" t-if="!d.logs.length">No sync yet</li>

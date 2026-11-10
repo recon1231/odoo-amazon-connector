@@ -290,3 +290,7 @@
             background: var(--amz-navy); color: #fff; font-weight: 700; }
         span { color: var(--amz-muted); font-size: .85rem; } }
 }
+
+.o_amz_spin { display: inline-block; animation: o_amz_rotate 1s linear infinite; }
+@keyframes o_amz_rotate { to { transform: rotate(360deg); } }
+.o_amz_dash .oi { vertical-align: -0.15em; }

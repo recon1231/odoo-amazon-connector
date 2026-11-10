@@ -43,14 +43,14 @@
                 <header>
                     <button name="action_process" type="object" string="Create sale order" class="btn-primary"
                             invisible="state not in ('new', 'error')"/>
-                    <button name="action_open_amazon" type="object" string="Seller Central" icon="fa-external-link"/>
+                    <button name="action_open_amazon" type="object" string="Seller Central" icon="open_in_new"/>
                     <field name="state" widget="statusbar" statusbar_visible="new,done"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_open_sale_order" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                        <button name="action_open_sale_order" type="object" class="oe_stat_button" icon="description"
                                 invisible="not sale_order_id" string="Sale order"/>
-                        <button name="action_open_invoices" type="object" class="oe_stat_button" icon="fa-pencil-square-o"
+                        <button name="action_open_invoices" type="object" class="oe_stat_button" icon="edit_square"
                                 invisible="not invoice_count">
                             <field name="invoice_count" widget="statinfo" string="Invoices"/>
                         </button>
@@ -75,7 +75,7 @@
                         </div>
                     </div>
                     <div class="alert alert-danger mt-3" role="status" invisible="state != 'error'">
-                        <i title="exclamation circle" class="fa fa-exclamation-circle me-2"/><field name="error_message" readonly="1" class="d-inline"/>
+                        <i data-icon="error" title="exclamation circle" class="oi me-2"/><field name="error_message" readonly="1" class="d-inline"/>
                     </div>
                     <group class="mt-3">
                         <group>

@@ -1,4 +1,4 @@
-import { Component, onWillStart, onMounted, onPatched, onWillUnmount, useRef, useState } from "@odoo/owl";
+import { Component, onWillStart, onMounted, onPatched, onWillUnmount, proxy, signal, useProps } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { loadBundle } from "@web/core/assets";
@@ -22,17 +22,17 @@ const HEALTH = [
 
 export class AmazonDashboard extends Component {
     static template = "chi_amazon_connector.Dashboard";
-    static props = ["*"];
+    props = useProps();
 
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
         this.notification = useService("notification");
-        this.salesChartRef = useRef("salesChart");
-        this.donutRef = useRef("donut");
+        this.salesChartRef = signal.ref();
+        this.donutRef = signal.ref();
         this.charts = [];
         this.health = HEALTH;
-        this.state = useState({
+        this.state = proxy({
             loading: true,
             syncing: false,
             accountId: false,
@@ -242,13 +242,13 @@ export class AmazonDashboard extends Component {
         if (!data || !data.accounts.length || !window.Chart) {
             return;
         }
-        const root = this.salesChartRef.el ? getComputedStyle(this.salesChartRef.el) : null;
+        const root = this.salesChartRef() ? getComputedStyle(this.salesChartRef()) : null;
         const textColor = (root && root.getPropertyValue("--amz-muted").trim()) || "#6b7280";
         const gridColor = (root && root.getPropertyValue("--amz-line").trim()) || "#e5e7eb";
         const labels = data.series.labels.map((l) => this.shortDate(l));
 
-        if (this.salesChartRef.el) {
-            const ctx = this.salesChartRef.el.getContext("2d");
+        if (this.salesChartRef()) {
+            const ctx = this.salesChartRef().getContext("2d");
             const grad = ctx.createLinearGradient(0, 0, 0, 260);
             grad.addColorStop(0, "rgba(16,185,129,0.25)");
             grad.addColorStop(1, "rgba(16,185,129,0)");
@@ -283,8 +283,8 @@ export class AmazonDashboard extends Component {
                 },
             }));
         }
-        if (this.donutRef.el && data.marketplaces.length) {
-            this.charts.push(new window.Chart(this.donutRef.el, {
+        if (this.donutRef() && data.marketplaces.length) {
+            this.charts.push(new window.Chart(this.donutRef(), {
                 type: "doughnut",
                 data: {
                     labels: data.marketplaces.map((m) => m.name),

@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
-                <button name="action_open_amazon_order" type="object" class="oe_stat_button" icon="fa-shopping-bag"
+                <button name="action_open_amazon_order" type="object" class="oe_stat_button" icon="shopping_bag"
                         invisible="not amazon_order_id" string="Amazon"/>
             </div>
         </field>

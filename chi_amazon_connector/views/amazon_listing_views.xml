@@ -44,7 +44,7 @@
                     <t t-name="card" class="flex-row p-0 o_amz_listing_card">
                         <aside class="o_amz_thumb">
                             <img t-if="record.image_url.raw_value" t-att-src="record.image_url.raw_value" alt="Product"/>
-                            <i title="cube" t-else="" class="fa fa-cube"/>
+                            <i data-icon="inventory_2" title="cube" t-else="" class="oi"/>
                         </aside>
                         <main class="p-2 flex-grow-1 overflow-hidden">
                             <div class="d-flex justify-content-between gap-2">
@@ -59,8 +59,8 @@
                                        decoration-warning="stock_health == 'under'" decoration-info="stock_health == 'fba'"/>
                             </div>
                             <div class="d-flex gap-3 small text-muted mt-1">
-                                <span><i title="shopping bag" class="fa fa-shopping-bag me-1"/><field name="amazon_qty"/> listed</span>
-                                <span><i title="archive" class="fa fa-archive me-1"/><field name="odoo_qty"/> in Odoo</span>
+                                <span><i data-icon="shopping_bag" title="shopping bag" class="oi me-1"/><field name="amazon_qty"/> listed</span>
+                                <span><i data-icon="archive" title="archive" class="oi me-1"/><field name="odoo_qty"/> in Odoo</span>
                                 <span class="ms-auto"><field name="units_30d"/> sold / 30d</span>
                             </div>
                         </main>
@@ -79,14 +79,14 @@
                     <button name="action_push_quantity" type="object" string="Push stock" class="btn-primary"
                             invisible="fulfillment != 'fbm' or not product_id"/>
                     <button name="action_auto_map" type="object" string="Find product" invisible="product_id"/>
-                    <button name="action_open_amazon" type="object" string="View on Amazon" icon="fa-external-link" invisible="not asin"/>
+                    <button name="action_open_amazon" type="object" string="View on Amazon" icon="open_in_new" invisible="not asin"/>
                     <field name="status" widget="statusbar" statusbar_visible="active,inactive"/>
                 </header>
                 <sheet>
                     <div class="o_amz_listing_hero">
                         <div class="o_amz_hero_img">
                             <field name="image_url" widget="image_url" options="{'size': [140, 140]}" invisible="not image_url"/>
-                            <i title="cube" class="fa fa-cube" invisible="image_url"/>
+                            <i data-icon="inventory_2" title="cube" class="oi" invisible="image_url"/>
                         </div>
                         <div class="flex-grow-1">
                             <h1 class="mb-1"><field name="seller_sku" placeholder="SKU"/></h1>

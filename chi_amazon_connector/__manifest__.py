@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     "name": "Amazon Seller Hub — SP-API Connector",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Sales/Sales",
     "summary": "Connect Amazon Seller Central (SP-API) to Odoo: orders, listings, "
                "stock sync, FBA inventory, settlements to accounting, returns, "
@@ -29,7 +29,7 @@ Run your whole Amazon business from Odoo:
     "external_dependencies": {"python": ["requests"]},
     "data": [
         "security/security.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "data/marketplace_data.xml",
         "data/ir_sequence_data.xml",
         "data/ir_cron_data.xml",

@@ -10,7 +10,7 @@
                 <templates>
                     <t t-name="card" class="o_amz_account_card">
                         <div class="d-flex align-items-center gap-3 mb-3">
-                            <div class="o_amz_avatar"><i title="cubes" class="fa fa-cubes"/></div>
+                            <div class="o_amz_avatar"><i data-icon="deployed_code" title="cubes" class="oi"/></div>
                             <div class="flex-grow-1 overflow-hidden">
                                 <field name="name" class="fw-bold fs-5 text-truncate d-block"/>
                                 <span class="text-muted small"><field name="region"/> · <field name="environment"/></span>
@@ -30,7 +30,7 @@
                         <footer class="pt-2 mt-2 border-top">
                             <span class="text-muted small">Last sync: <field name="last_sync" widget="remaining_days" invisible="not last_sync"/><span invisible="last_sync">never</span></span>
                             <button name="action_sync_all" type="object" class="btn btn-sm btn-primary ms-auto"
-                                    invisible="state == 'draft'"><i title="refresh" class="fa fa-refresh me-1"/>Sync</button>
+                                    invisible="state == 'draft'"><i data-icon="refresh" title="refresh" class="oi me-1"/>Sync</button>
                             <button name="action_test_connection" type="object" class="btn btn-sm btn-secondary ms-auto"
                                     invisible="state != 'draft'" groups="chi_amazon_connector.group_amazon_manager">Connect</button>
                         </footer>
@@ -71,17 +71,17 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_open_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart">
+                        <button name="action_open_orders" type="object" class="oe_stat_button" icon="shopping_cart">
                             <field name="order_count" widget="statinfo" string="Orders"/>
                         </button>
-                        <button name="action_open_listings" type="object" class="oe_stat_button" icon="fa-tags">
+                        <button name="action_open_listings" type="object" class="oe_stat_button" icon="sell">
                             <field name="listing_count" widget="statinfo" string="Listings"/>
                         </button>
-                        <button name="action_open_unmapped" type="object" class="oe_stat_button text-warning" icon="fa-chain-broken"
+                        <button name="action_open_unmapped" type="object" class="oe_stat_button text-warning" icon="link_off"
                                 invisible="not unmapped_count">
                             <field name="unmapped_count" widget="statinfo" string="Unmapped"/>
                         </button>
-                        <button name="action_open_logs" type="object" class="oe_stat_button" icon="fa-history" string="Sync log"/>
+                        <button name="action_open_logs" type="object" class="oe_stat_button" icon="history" string="Sync log"/>
                     </div>
                     <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
                     <div class="oe_title">
@@ -89,7 +89,7 @@
                         <h1><field name="name" placeholder="e.g. My Amazon.ca store"/></h1>
                     </div>
                     <div class="alert alert-danger mb-3" role="status" invisible="state != 'error' or not last_error">
-                        <i title="exclamation triangle" class="fa fa-exclamation-triangle me-2"/><field name="last_error" readonly="1" class="d-inline"/>
+                        <i data-icon="warning" title="exclamation triangle" class="oi me-2"/><field name="last_error" readonly="1" class="d-inline"/>
                     </div>
                     <group>
                         <group string="Seller Central">

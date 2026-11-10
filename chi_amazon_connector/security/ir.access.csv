@@ -1,0 +1,30 @@
+id,name,model_id,group_id/id,operation,domain
+access_chi_amazon_account_user,chi_amazon_account user,chi.amazon.account,chi_amazon_connector.group_amazon_user,r,
+access_chi_amazon_account_manager,chi_amazon_account manager,chi.amazon.account,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_marketplace_user,chi_amazon_marketplace user,chi.amazon.marketplace,chi_amazon_connector.group_amazon_user,r,
+access_chi_amazon_marketplace_manager,chi_amazon_marketplace manager,chi.amazon.marketplace,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_listing_user,chi_amazon_listing user,chi.amazon.listing,chi_amazon_connector.group_amazon_user,cru,
+access_chi_amazon_listing_manager,chi_amazon_listing manager,chi.amazon.listing,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_order_user,chi_amazon_order user,chi.amazon.order,chi_amazon_connector.group_amazon_user,cru,
+access_chi_amazon_order_manager,chi_amazon_order manager,chi.amazon.order,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_order_line_user,chi_amazon_order_line user,chi.amazon.order.line,chi_amazon_connector.group_amazon_user,cru,
+access_chi_amazon_order_line_manager,chi_amazon_order_line manager,chi.amazon.order.line,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_fba_inventory_user,chi_amazon_fba_inventory user,chi.amazon.fba.inventory,chi_amazon_connector.group_amazon_user,r,
+access_chi_amazon_fba_inventory_manager,chi_amazon_fba_inventory manager,chi.amazon.fba.inventory,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_settlement_user,chi_amazon_settlement user,chi.amazon.settlement,chi_amazon_connector.group_amazon_user,ru,
+access_chi_amazon_settlement_manager,chi_amazon_settlement manager,chi.amazon.settlement,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_settlement_line_user,chi_amazon_settlement_line user,chi.amazon.settlement.line,chi_amazon_connector.group_amazon_user,r,
+access_chi_amazon_settlement_line_manager,chi_amazon_settlement_line manager,chi.amazon.settlement.line,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_return_user,chi_amazon_return user,chi.amazon.return,chi_amazon_connector.group_amazon_user,cru,
+access_chi_amazon_return_manager,chi_amazon_return manager,chi.amazon.return,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_sync_log_user,chi_amazon_sync_log user,chi.amazon.sync.log,chi_amazon_connector.group_amazon_user,r,
+access_chi_amazon_sync_log_manager,chi_amazon_sync_log manager,chi.amazon.sync.log,chi_amazon_connector.group_amazon_manager,crud,
+access_chi_amazon_sync_wizard_user,chi_amazon_sync_wizard user,chi.amazon.sync.wizard,chi_amazon_connector.group_amazon_user,crud,
+access_chi_amazon_sync_wizard_manager,chi_amazon_sync_wizard manager,chi.amazon.sync.wizard,chi_amazon_connector.group_amazon_manager,crud,
+rule_amazon_account_company,Amazon account: multi-company,chi.amazon.account,,crud,"[('company_id', 'in', company_ids)]"
+rule_amazon_order_company,Amazon order: multi-company,chi.amazon.order,,crud,"[('company_id', 'in', company_ids)]"
+rule_amazon_listing_company,Amazon listing: multi-company,chi.amazon.listing,,crud,"[('company_id', 'in', company_ids)]"
+rule_amazon_settlement_company,Amazon settlement: multi-company,chi.amazon.settlement,,crud,"[('company_id', 'in', company_ids)]"
+rule_amazon_return_company,Amazon return: multi-company,chi.amazon.return,,crud,"[('company_id', 'in', company_ids)]"
+rule_amazon_fba_inventory_company,Amazon fba.inventory: multi-company,chi.amazon.fba.inventory,,crud,"[('company_id', 'in', company_ids)]"
+rule_amazon_sync_log_company,Amazon sync.log: multi-company,chi.amazon.sync.log,,crud,"[('company_id', 'in', company_ids)]"

@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="product.product_template_only_form_view"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
-                <button name="action_open_amazon_listings" type="object" class="oe_stat_button" icon="fa-shopping-bag"
+                <button name="action_open_amazon_listings" type="object" class="oe_stat_button" icon="shopping_bag"
                         invisible="not amazon_listing_count" groups="chi_amazon_connector.group_amazon_user">
                     <field name="amazon_listing_count" widget="statinfo" string="Amazon"/>
                 </button>
